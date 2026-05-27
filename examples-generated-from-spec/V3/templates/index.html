@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Club Hub | Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="/" class="nav-brand">📚 Homework Club Hub</a>
+            <div class="nav-links">
+                <a href="/search">Find a Tutor</a>
+                <a href="/login">Login</a>
+                <a href="/join" class="btn btn-primary">Join the Club</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero container">
+        <h1>Empowering Students through Community Support.</h1>
+        <p>Free academic tutoring paired by subject, language, and culture to ensure every student succeeds.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/join" class="btn btn-primary">Get Started</a>
+            <a href="/search" class="btn btn-secondary">Find a Tutor</a>
+        </div>
+    </header>
+
+    <section class="container" style="padding: 4rem 0; text-align: center;">
+        <h2 style="margin-bottom: 3rem;">How It Works</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div>
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                <h3>Join</h3>
+                <p>Create a profile specifying your academic needs or your expertise as a volunteer.</p>
+            </div>
+            <div>
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✨</div>
+                <h3>Match</h3>
+                <p>Our system pairs you with a tutor who shares your subject interests and cultural background.</p>
+            </div>
+            <div>
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                <h3>Succeed</h3>
+                <p>Break through learning barriers with support that understands you.</p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

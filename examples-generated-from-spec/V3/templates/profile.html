@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | Homework Club Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="/" class="nav-brand">📚 Homework Club Hub</a>
+            <div class="nav-links">
+                <a href="/search">Back to Search</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" style="max-width: 600px; text-align: center;">
+            <div id="profileContent">
+                <div class="profile-avatar">👤</div>
+                <h1 id="userName">Loading...</h1>
+                <p id="userRole" style="font-weight: 600; color: var(--primary); text-transform: uppercase; font-size: 0.9rem; margin-bottom: 2rem;"></p>
+                
+                <div style="text-align: left; display: grid; gap: 1rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <p id="userEmail" style="margin: 0; color: var(--text-main);"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Academic Subject</label>
+                        <p id="userSubject" style="margin: 0; color: var(--text-main);"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Language / Background</label>
+                        <p id="userLanguage" style="margin: 0; color: var(--text-main);"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Joined Date</label>
+                        <p id="userCreated" style="margin: 0; color: var(--text-main);"></p>
+                    </div>
+                </div>
+                
+                <div id="actionArea" style="margin-top: 2rem;">
+                    <!-- Action button based on role -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadProfile() {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name');
+            let endpoint = '/api/me';
+            
+            if (name) {
+                endpoint = `/api/profile?name=${encodeURIComponent(name)}`;
+            }
+
+            try {
+                const response = await fetch(endpoint);
+                const user = await response.json();
+
+                if (!response.ok) throw new Error(user.error || 'User not found');
+
+                document.getElementById('userName').innerText = user.full_name;
+                document.getElementById('userRole').innerText = user.role === 'volunteer' ? 'Volunteer Tutor' : 'Student / Parent';
+                document.getElementById('userEmail').innerText = user.email;
+                document.getElementById('userSubject').innerText = user.subject || 'Not specified';
+                document.getElementById('userLanguage').innerText = user.language || 'Not specified';
+                document.getElementById('userCreated').innerText = user.created_at;
+
+                const actionArea = document.getElementById('actionArea');
+                if (user.role === 'volunteer') {
+                    actionArea.innerHTML = '<button class="btn btn-primary" style="width: 100%;">Request Session</button>';
+                } else {
+                    actionArea.innerHTML = '<button class="btn btn-secondary" style="width: 100%;">Edit My Needs</button>';
+                }
+            } catch (err) {
+                document.getElementById('profileContent').innerHTML = `
+                    <h2 style="color: red;">Error</h2>
+                    <p>${err.message}</p>
+                    <a href="/search" class="btn btn-primary">Go Back</a>
+                `;
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

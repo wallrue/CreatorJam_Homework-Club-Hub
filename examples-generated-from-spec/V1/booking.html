@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Session | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+    <!-- Navigation -->
+    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
+        <a href="index.html" class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
+            <span class="text-3xl">📚</span> Homework Club Hub
+        </a>
+        <div class="space-x-6 hidden md:flex items-center">
+            <a href="search.html" class="text-stone-600 hover:text-emerald-700 transition">Find a Tutor</a>
+            <a href="index.html" class="text-stone-600 hover:text-emerald-700 transition">Home</a>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">Request a Session</h1>
+            <p class="text-stone-600">You are requesting a session with <span class="font-bold text-emerald-700">Dr. Amara Okafor</span></p>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-200">
+            <form action="#" method="POST" class="space-y-6">
+                <!-- Student Info -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Parent/Guardian Name</label>
+                        <input type="text" placeholder="Your Name" class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Student Name</label>
+                        <input type="text" placeholder="Student's Name" class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Needs -->
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-2">What do you need help with?</label>
+                    <textarea rows="4" placeholder="e.g. Struggling with Organic Chemistry moles and stoichiometry..." class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none transition"></textarea>
+                </div>
+
+                <!-- Preferences -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Preferred Date</label>
+                        <input type="date" class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-stone-700 mb-2">Preferred Time</label>
+                        <input type="time" class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Accessibility Note -->
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" class="mt-1 w-4 h-4 text-emerald-600 border-stone-300 rounded focus:ring-emerald-500">
+                        <span class="text-sm text-stone-600">I would like the tutor to use a specific language (e.g., Igbo) during the session to help the student understand better.</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-700 text-white py-4 rounded-xl font-bold text-lg hover:bg-emerald-800 transition shadow-lg">
+                    Send Booking Request
+                </button>
+            </form>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="profile.html" class="text-stone-500 hover:text-emerald-700 transition text-sm font-medium">← Back to Tutor Profile</a>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Tutor | Homework Club Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="/" class="nav-brand">📚 Homework Club Hub</a>
+            <div class="nav-links">
+                <a href="/profile">My Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero" style="padding: 2rem 0;">
+            <h1>Find the Perfect Tutor</h1>
+            <p>Match with mentors who understand your language and your learning goals.</p>
+        </div>
+
+        <div class="card" style="max-width: 100%; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; justify-content: center;">
+            <div class="form-group" style="flex: 1; min-width: 200px;">
+                <label>Subject</label>
+                <select id="subjectFilter">
+                    <option value="All Subjects">All Subjects</option>
+                    <option value="Math">Math</option>
+                    <option value="Science">Science</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="English">English</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 200px;">
+                <label>Language / Background</label>
+                <select id="languageFilter">
+                    <option value="All Backgrounds">All Backgrounds</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="Mandarin">Mandarin</option>
+                    <option value="Vietnamese">Vietnamese</option>
+                    <option value="French">French</option>
+                    <option value="English">English</option>
+                </select>
+            </div>
+            <button onclick="fetchTutors()" class="btn btn-primary">Filter</button>
+            <button onclick="aiMatch()" class="btn btn-secondary">✨ AI Magic Match</button>
+        </div>
+
+        <div id="tutorResults" class="tutor-grid">
+            <!-- Tutor cards will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        async function fetchTutors() {
+            const subject = document.getElementById('subjectFilter').value;
+            const language = document.getElementById('languageFilter').value;
+            const resultsDiv = document.getElementById('tutorResults');
+            
+            resultsDiv.innerHTML = '<p style="text-align: center; width: 100%;">Searching for tutors...</p>';
+
+            try {
+                const response = await fetch(`/api/tutors?subject=${encodeURIComponent(subject)}&language=${encodeURIComponent(language)}`);
+                const tutors = await response.json();
+                
+                if (tutors.length === 0) {
+                    resultsDiv.innerHTML = '<p style="text-align: center; width: 100%;">No tutors found matching those criteria.</p>';
+                    return;
+                }
+
+                resultsDiv.innerHTML = tutors.map(t => `
+                    <div class="tutor-card">
+                        <h3>${t.full_name}</h3>
+                        <p><strong>Subject:</strong> ${t.subject}</p>
+                        <p><strong>Language:</strong> ${t.language}</p>
+                        <a href="/profile?name=${encodeURIComponent(t.full_name)}" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 1rem;">View Profile</a>
+                    </div>
+                `).join('');
+            } catch (err) {
+                resultsDiv.innerHTML = '<p style="color: red; text-align: center; width: 100%;">Error loading tutors.</p>';
+            }
+        }
+
+        async function aiMatch() {
+            const resultsDiv = document.getElementById('tutorResults');
+            resultsDiv.innerHTML = '<p style="text-align: center; width: 100%;">AI is analyzing profiles for the best match...</p>';
+
+            try {
+                const response = await fetch('/api/ai-match');
+                const data = await response.json();
+                
+                if (!response.ok) throw new Error(data.error || 'AI Match failed');
+
+                const t = data.match;
+                resultsDiv.innerHTML = `
+                    <div class="tutor-card" style="grid-column: 1 / -1; border: 2px solid var(--secondary); background: #fffbeb;">
+                        <span class="ai-badge">✨ AI SUGGESTED MATCH</span>
+                        <h2>${t.full_name}</h2>
+                        <p class="reasoning-text">${data.reasoning}</p>
+                        <p><strong>Compatibility:</strong> ${data.compatibility}</p>
+                        <p><strong>Expertise:</strong> ${t.subject} | <strong>Language:</strong> ${t.language}</p>
+                        <a href="/profile?name=${encodeURIComponent(t.full_name)}" class="btn btn-secondary" style="width: 100%; text-align: center; margin-top: 1rem;">View Profile</a>
+                    </div>
+                `;
+            } catch (err) {
+                resultsDiv.innerHTML = `<p style="color: red; text-align: center; width: 100%;">${err.message}</p>`;
+            }
+        }
+
+        // Load initial tutors
+        fetchTutors();
+    </script>
+</body>
+</html>

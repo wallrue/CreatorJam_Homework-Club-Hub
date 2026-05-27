@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Tutor - Homework Club Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand"><strong>📚 Homework Club Hub</strong></div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/profile">My Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Find Your Perfect Learning Partner</h1>
+            <p>Use our AI Match or browse tutors manually to find the best fit for your needs.</p>
+            <div style="margin-top: 2rem;">
+                <button id="aiMatchBtn" class="btn btn-secondary" style="font-size: 1.2rem; padding: 1rem 2rem;">✨ Find My Magic Match</button>
+            </div>
+        </div>
+
+        <div id="aiMatchResult" style="display:none; margin-bottom: 3rem;">
+            <h2 style="text-align: center; color: var(--primary-color);">Your AI Recommended Match</h2>
+            <div class="grid" style="grid-template-columns: 1fr; max-width: 600px; margin: 0 auto;">
+                <div id="aiMatchCard" class="card match-highlight">
+                    <!-- Content injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 4rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h2 style="text-align: center;">Browse All Volunteers</h2>
+        <div class="card" style="max-width: 600px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; align-items: flex-end;">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label>Subject</label>
+                <input type="text" id="filterSubject" placeholder="All Subjects">
+            </div>
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label>Language</label>
+                <input type="text" id="filterLanguage" placeholder="All Backgrounds">
+            </div>
+            <button id="searchBtn" class="btn btn-primary" style="margin-bottom: 0.5rem;">Search</button>
+        </div>
+
+        <div id="tutorGrid" class="grid">
+            <!-- Tutor cards injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        async function loadTutors(subject = 'All Subjects', language = 'All Backgrounds') {
+            const response = await fetch(`/api/tutors?subject=${encodeURIComponent(subject)}&language=${encodeURIComponent(language)}`);
+            const tutors = await response.json();
+            const grid = document.getElementById('tutorGrid');
+            grid.innerHTML = '';
+
+            if (tutors.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No tutors found matching those criteria.</p>';
+                return;
+            }
+
+            tutors.forEach(t => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <span class="badge badge-volunteer">Volunteer</span>
+                        <h3 style="margin: 0.5rem 0;">${t.full_name}</h3>
+                        <p><strong>Subject:</strong> ${t.subject}</p>
+                        <p><strong>Language:</strong> ${t.language}</p>
+                        <a href="/profile?name=${encodeURIComponent(t.full_name)}" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 1rem;">View Profile</a>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('aiMatchBtn').onclick = async () => {
+            const response = await fetch('/api/ai-match');
+            const result = await response.json();
+            const resultDiv = document.getElementById('aiMatchResult');
+            const card = document.getElementById('aiMatchCard');
+
+            if (response.ok) {
+                resultDiv.style.display = 'block';
+                card.innerHTML = `
+                    <span class="badge badge-volunteer">Top Match</span>
+                    <h3 style="margin: 0.5rem 0; font-size: 1.5rem;">${result.match.full_name}</h3>
+                    <p><strong>Compatibility:</strong> ${result.compatibility}</p>
+                    <div class="reasoning-box">${result.reasoning}</div>
+                    <p><strong>Expertise:</strong> ${result.match.subject}</p>
+                    <p><strong>Language:</strong> ${result.match.language}</p>
+                    <a href="/profile?name=${encodeURIComponent(result.match.full_name)}" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 1rem;">View Profile</a>
+                `;
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Error: ' + result.error);
+            }
+        };
+
+        document.getElementById('searchBtn').onclick = () => {
+            const s = document.getElementById('filterSubject').value || 'All Subjects';
+            const l = document.getElementById('filterLanguage').value || 'All Backgrounds';
+            loadTutors(s, l);
+        };
+
+        // Initial load
+        loadTutors();
+    </script>
+</body>
+</html>

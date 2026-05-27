@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+    <nav class="bg-white border-b border-stone-100 sticky top-0 z-50">
+        <div class="p-4 md:p-6 flex justify-between items-center max-w-7xl mx-auto">
+            <a href="/" class="text-xl md:text-2xl font-bold text-emerald-800 flex items-center gap-2">
+                <span class="text-3xl">📚</span>
+                <span class="hidden sm:inline">Homework Club Hub</span>
+            </a>
+            <div id="nav-links" class="space-x-1 md:space-x-6 flex items-center">
+                <a href="/search" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">Find a Tutor</a>
+                <a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">My Sessions</a>
+                <a href="/logout" class="bg-red-50 text-red-700 px-4 py-2 rounded-full font-semibold text-sm hover:bg-red-100 transition">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold mb-1">Admin Dashboard</h1>
+            <p class="text-stone-600 text-sm">Monitor platform health, manage users, and review activity</p>
+        </div>
+
+        <!-- Admin Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-emerald-700" id="statUsers">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Total Users</p>
+            </div>
+            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-blue-600" id="statVolunteers">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Volunteers</p>
+            </div>
+            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-purple-600" id="statStudents">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Students/Parents</p>
+            </div>
+            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-amber-600" id="statSessions">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Sessions</p>
+            </div>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button class="admin-tab active px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-700 text-white whitespace-nowrap" data-tab="users">Users</button>
+            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="sessions">Sessions</button>
+            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="volunteers">Volunteer Vetting</button>
+            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="reports">Reports</button>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="tab-users" class="admin-panel">
+            <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden">
+                <div class="p-4 md:p-5 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <h2 class="font-bold text-lg">All Users</h2>
+                    <div class="relative">
+                        <input type="text" id="userSearch" placeholder="Search users..." class="pl-9 pr-4 py-2 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none text-sm w-full sm:w-64">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">🔍</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th class="text-left p-4 font-semibold text-stone-600">Name</th>
+                                <th class="text-left p-4 font-semibold text-stone-600">Email</th>
+                                <th class="text-left p-4 font-semibold text-stone-600">Role</th>
+                                <th class="text-left p-4 font-semibold text-stone-600 hidden md:table-cell">Subject</th>
+                                <th class="text-left p-4 font-semibold text-stone-600 hidden md:table-cell">Language</th>
+                                <th class="text-left p-4 font-semibold text-stone-600 hidden lg:table-cell">Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sessions Tab -->
+        <div id="tab-sessions" class="admin-panel hidden">
+            <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                <h2 class="font-bold text-lg mb-4">Session Overview</h2>
+                <p class="text-stone-500 text-sm mb-4">Upcoming and recent sessions across the platform.</p>
+                <div id="admin-sessions-list" class="space-y-3">
+                    <!-- Admin sessions injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Volunteer Vetting Tab -->
+        <div id="tab-volunteers" class="admin-panel hidden">
+            <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                <h2 class="font-bold text-lg mb-4">Volunteer Vetting Queue</h2>
+                <p class="text-stone-500 text-sm mb-4">Review and verify new volunteer tutors.</p>
+                <div id="vetting-list" class="space-y-3">
+                    <!-- Vetting items injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="tab-reports" class="admin-panel hidden">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                    <h2 class="font-bold text-lg mb-4">Subject Distribution</h2>
+                    <div id="subject-chart" class="space-y-3">
+                        <!-- Subject bars injected by JS -->
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                    <h2 class="font-bold text-lg mb-4">Language/Cultural Distribution</h2>
+                    <div id="language-chart" class="space-y-3">
+                        <!-- Language bars injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-12 px-6 text-center">
+        <p class="mb-4 font-bold text-white">Homework Club Hub</p>
+        <p class="text-sm">Empowering students through community-driven mentorship.</p>
+        <div class="mt-4 text-xs text-stone-500">&copy; 2026 Indigenomics Impact Creator Jam</div>
+    </footer>
+
+    <script>
+        function showToast(message, type = 'info') {
+            const colors = { success: 'bg-green-100 text-green-700', error: 'bg-red-100 text-red-700', info: 'bg-blue-100 text-blue-700', warning: 'bg-amber-100 text-amber-700' };
+            const el = document.createElement('div');
+            el.className = `fixed top-4 right-4 ${colors[type]} px-4 py-3 rounded-xl shadow-lg z-50 text-sm font-medium`;
+            el.textContent = message;
+            document.body.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        // Tab switching
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => {
+                    t.classList.remove('bg-emerald-700', 'text-white');
+                    t.classList.add('bg-white', 'text-stone-600', 'border', 'border-stone-200');
+                });
+                tab.classList.remove('bg-white', 'text-stone-600', 'border', 'border-stone-200');
+                tab.classList.add('bg-emerald-700', 'text-white');
+                
+                document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
+                document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
+            });
+        });
+
+        // Mock data
+        const users = [
+            { user_id: 1, full_name: 'Jane Doe', email: 'jane@example.com', role: 'student_parent', subject: 'Chemistry', language: 'Spanish Speaking', created_at: '2026-05-25 21:25:29' },
+            { user_id: 2, full_name: 'Dr. Smith', email: 'smith@example.com', role: 'volunteer', subject: 'Biology', language: 'French Speaking', created_at: '2026-05-25 21:25:29' },
+            { user_id: 3, full_name: 'Maria Garcia', email: 'maria@example.com', role: 'volunteer', subject: 'Chemistry', language: 'Spanish Speaking', created_at: '2026-05-25 21:25:29' },
+            { user_id: 4, full_name: 'Admin User', email: 'admin@example.com', role: 'admin', subject: null, language: null, created_at: '2026-05-25 21:25:29' },
+            { user_id: 6, full_name: 'Donald Trump', email: 'trump@example.com', role: 'volunteer', subject: 'Mathematics', language: 'English Speaking', created_at: '2026-05-26 06:00:22' },
+            { user_id: 7, full_name: 'Elon Musk', email: 'musk@example.com', role: 'volunteer', subject: 'Physics', language: 'French Speaking', created_at: '2026-05-26 09:19:29' },
+            { user_id: 8, full_name: 'Ben', email: 'extraxim@gmail.com', role: 'student_parent', subject: 'Mathematics', language: 'French Speaking', created_at: '2026-05-26 10:34:25' },
+        ];
+
+        const mockSessions = [
+            { id: 1, student: 'Sofia', tutor: 'Maria Garcia', date: '2026-06-01', time: '15:00', status: 'pending', subject: 'Chemistry' },
+            { id: 2, student: 'James', tutor: 'Dr. Smith', date: '2025-12-15', time: '10:00', status: 'confirmed', subject: 'Biology' },
+            { id: 3, student: 'Isabella', tutor: 'Maria Garcia', date: '2025-12-01', time: '14:00', status: 'completed', subject: 'Chemistry', rating: 5 },
+            { id: 4, student: 'Lucas', tutor: 'Dr. Smith', date: '2025-11-20', time: '16:00', status: 'cancelled', subject: 'Biology' },
+        ];
+
+        // Render users table
+        function renderUsers(filter = '') {
+            const filtered = users.filter(u => 
+                u.full_name.toLowerCase().includes(filter.toLowerCase()) ||
+                u.email.toLowerCase().includes(filter.toLowerCase()) ||
+                u.role.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            const roleColors = {
+                volunteer: 'bg-blue-100 text-blue-700',
+                student_parent: 'bg-purple-100 text-purple-700',
+                admin: 'bg-red-100 text-red-700'
+            };
+
+            document.getElementById('users-table-body').innerHTML = filtered.map(u => `
+                <tr class="border-b border-stone-50 hover:bg-stone-50 transition">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-xs font-bold text-emerald-700 shrink-0">
+                                ${u.full_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                            </div>
+                            <span class="font-medium">${u.full_name}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-stone-600">${u.email}</td>
+                    <td class="p-4"><span class="text-xs font-semibold px-2.5 py-1 rounded-full ${roleColors[u.role]}">${u.role.replace('_', ' ')}</span></td>
+                    <td class="p-4 text-stone-600 hidden md:table-cell">${u.subject || '—'}</td>
+                    <td class="p-4 text-stone-600 hidden md:table-cell">${u.language || '—'}</td>
+                    <td class="p-4 text-stone-500 hidden lg:table-cell">${u.created_at.split(' ')[0]}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Admin sessions
+        function renderAdminSessions() {
+            const statusColors = { pending: 'bg-amber-100 text-amber-700', confirmed: 'bg-blue-100 text-blue-700', completed: 'bg-emerald-100 text-emerald-700', cancelled: 'bg-red-100 text-red-700' };
+            document.getElementById('admin-sessions-list').innerHTML = mockSessions.map(s => `
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                    <div class="flex-1">
+                        <p class="font-medium text-sm">${s.student} → ${s.tutor}</p>
+                        <p class="text-xs text-stone-500">${s.date} at ${s.time} • ${s.subject}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${statusColors[s.status]} shrink-0">${s.status}</span>
+                </div>
+            `).join('');
+        }
+
+        // Vetting queue
+        function renderVetting() {
+            const volunteers = users.filter(u => u.role === 'volunteer');
+            document.getElementById('vetting-list').innerHTML = volunteers.map(v => `
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                    <div class="flex items-center gap-3 flex-1">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-700 shrink-0">
+                            ${v.full_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm">${v.full_name}</p>
+                            <p class="text-xs text-stone-500">${v.subject} • ${v.language}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="verifyVolunteer('${v.email}')" class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition">✓ Verify</button>
+                        <button class="bg-red-50 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-red-100 transition">Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.verifyVolunteer = function(email) {
+            showToast(`Volunteer ${email} marked as verified!`, 'success');
+        };
+
+        // Reports charts
+        function renderReports() {
+            // Subject distribution
+            const subjectCounts = {};
+            users.forEach(u => {
+                if (u.subject && u.subject !== 'None') {
+                    subjectCounts[u.subject] = (subjectCounts[u.subject] || 0) + 1;
+                }
+            });
+            const maxSubject = Math.max(...Object.values(subjectCounts), 1);
+            const colors = ['bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-amber-500', 'bg-red-500'];
+            
+            document.getElementById('subject-chart').innerHTML = Object.entries(subjectCounts).map(([subject, count], i) => `
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium">${subject}</span>
+                        <span class="text-stone-500">${count} user${count !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="h-3 bg-stone-100 rounded-full overflow-hidden">
+                        <div class="${colors[i % colors.length]} h-full rounded-full transition-all" style="width: ${(count / maxSubject) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Language distribution
+            const langCounts = {};
+            users.forEach(u => {
+                if (u.language && u.language !== 'None') {
+                    langCounts[u.language] = (langCounts[u.language] || 0) + 1;
+                }
+            });
+            const maxLang = Math.max(...Object.values(langCounts), 1);
+            
+            document.getElementById('language-chart').innerHTML = Object.entries(langCounts).map(([lang, count], i) => `
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium">${lang}</span>
+                        <span class="text-stone-500">${count} user${count !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="h-3 bg-stone-100 rounded-full overflow-hidden">
+                        <div class="${colors[i % colors.length]} h-full rounded-full transition-all" style="width: ${(count / maxLang) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update stats
+        document.getElementById('statUsers').textContent = users.length;
+        document.getElementById('statVolunteers').textContent = users.filter(u => u.role === 'volunteer').length;
+        document.getElementById('statStudents').textContent = users.filter(u => u.role === 'student_parent').length;
+        document.getElementById('statSessions').textContent = mockSessions.length;
+
+        // Search
+        document.getElementById('userSearch').addEventListener('input', (e) => {
+            renderUsers(e.target.value);
+        });
+
+        // Init
+        renderUsers();
+        renderAdminSessions();
+        renderVetting();
+        renderReports();
+    </script>
+</body>
+</html>

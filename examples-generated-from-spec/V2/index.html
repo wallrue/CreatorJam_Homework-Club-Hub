@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Club Hub | Community Academic Support</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e67e22;
+            --light: #f4f7f6;
+            --text: #333;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: var(--secondary);
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--white);
+        }
+        .btn-outline {
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .cta-group { flex-direction: column; align-items: center; }
+            .btn { width: 80%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">📚 Homework Club Hub</a>
+        <nav>
+            <a href="/search">Find a Tutor</a>
+            <a href="/login">Login</a>
+            <a href="/join" style="background: var(--accent); padding: 8px 15px; border-radius: 4px;">Join Now</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Bridging the Gap in Learning</h1>
+        <p>Connecting students with volunteer tutors who share their language, culture, and passion for academic success. Free, accessible, and community-driven.</p>
+        <div class="cta-group">
+            <a href="/join" class="btn btn-primary">I Need a Tutor</a>
+            <a href="/join" class="btn btn-outline">I Want to Volunteer</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>🌍 Cultural Resonance</h3>
+            <p>We prioritize pairing students with tutors from the same linguistic and cultural background to foster trust and psychological safety.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔓 Radical Accessibility</h3>
+            <p>Quality academic support should never be gated by financial barriers. Our platform is completely free for all students.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🚀 Career Empowerment</h3>
+            <p>Tutors build professional visibility and social proof through verified impact portfolios, turning volunteering into a career-building opportunity.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 Homework Club Hub | An Indigenomics Impact Project</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Empowering students through community-led education.</p>
+    </footer>
+</body>
+</html>

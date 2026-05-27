@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen">
+    <nav class="bg-white border-b border-stone-100 sticky top-0 z-50">
+        <div class="p-4 md:p-6 flex justify-between items-center max-w-7xl mx-auto">
+            <a href="/" class="text-xl md:text-2xl font-bold text-emerald-800 flex items-center gap-2">
+                <span class="text-3xl">📚</span>
+                <span class="hidden sm:inline">Homework Club Hub</span>
+            </a>
+            <div id="nav-links" class="space-x-1 md:space-x-6 flex items-center">
+                <a href="/search" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">Find a Tutor</a>
+                <a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">My Sessions</a>
+                <a href="/logout" class="bg-red-50 text-red-700 px-4 py-2 rounded-full font-semibold text-sm hover:bg-red-100 transition">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto py-8 px-4 md:py-12">
+        <!-- Profile Card -->
+        <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 h-32"></div>
+            <div class="px-6 md:px-8 pb-8">
+                <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-10 mb-6">
+                    <div class="w-24 h-24 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center text-4xl flex-shrink-0">
+                        <span id="avatar-icon">👤</span>
+                    </div>
+                    <div class="flex-1 text-center sm:text-left">
+                        <h1 id="userName" class="text-2xl md:text-3xl font-bold text-stone-800 mb-1">Loading...</h1>
+                        <p id="userRole" class="text-emerald-700 font-semibold mb-2">Loading role...</p>
+                        <span id="userBadge" class="inline-block bg-stone-100 text-stone-600 text-xs font-bold px-3 py-1 rounded-full">Pending</span>
+                    </div>
+                    <button id="editBtn" class="sm:mb-2 px-5 py-2 bg-stone-800 text-white rounded-xl font-semibold text-sm hover:bg-stone-900 transition hidden">Edit Profile</button>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Email</p>
+                        <p id="userEmail" class="text-stone-800 font-medium">—</p>
+                    </div>
+                    <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Subject / Expertise</p>
+                        <p id="userSubject" class="text-stone-800 font-medium">—</p>
+                    </div>
+                    <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Language / Cultural Background</p>
+                        <p id="userLanguage" class="text-stone-800 font-medium">—</p>
+                    </div>
+                    <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Member Since</p>
+                        <p id="userJoined" class="text-stone-800 font-medium">—</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Volunteer Stats -->
+        <div id="volunteerStats" class="grid sm:grid-cols-3 gap-4 mb-6 hidden">
+            <div class="bg-white p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-3xl font-bold text-emerald-700" id="statHours">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Volunteer Hours</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-3xl font-bold text-emerald-700" id="statSessions">0</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Sessions Completed</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-stone-200 text-center">
+                <p class="text-3xl font-bold text-emerald-700" id="statRating">—</p>
+                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Avg. Rating</p>
+            </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Edit Profile</h2>
+                    <button id="closeModal" class="text-stone-400 hover:text-stone-600 text-2xl leading-none">&times;</button>
+                </div>
+                <form id="editForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Subject / Expertise</label>
+                        <select id="editSubject" class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="None">None / General</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Biology">Biology</option>
+                            <option value="English">English</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Language / Cultural Background</label>
+                        <select id="editLanguage" class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="None">None / General</option>
+                            <option value="Indigenous / First Nations">Indigenous / First Nations</option>
+                            <option value="Spanish Speaking">Spanish Speaking</option>
+                            <option value="Mandarin Speaking">Mandarin Speaking</option>
+                            <option value="Arabic Speaking">Arabic Speaking</option>
+                            <option value="French Speaking">French Speaking</option>
+                            <option value="English Speaking">English Speaking</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Availability (for volunteers)</label>
+                        <input type="text" id="editAvailability" placeholder="e.g. Weekday evenings, Weekend mornings" class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition">Save Changes</button>
+                </form>
+                <div id="editMsg" class="mt-3 text-center hidden p-3 rounded-lg text-sm"></div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid sm:grid-cols-2 gap-4">
+            <a href="/search" class="p-6 bg-white rounded-xl border border-stone-200 hover:border-emerald-300 hover:shadow-md transition block text-center">
+                <p class="text-3xl mb-3">🔍</p>
+                <h3 class="font-bold text-lg mb-1">Find a Tutor</h3>
+                <p class="text-stone-500 text-sm">Browse volunteers and book a session</p>
+            </a>
+            <a href="/my-sessions" class="p-6 bg-white rounded-xl border border-stone-200 hover:border-emerald-300 hover:shadow-md transition block text-center">
+                <p class="text-3xl mb-3">📅</p>
+                <h3 class="font-bold text-lg mb-1">My Sessions</h3>
+                <p class="text-stone-500 text-sm">View and manage your bookings</p>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-12 px-6 text-center">
+        <p class="mb-4 font-bold text-white">Homework Club Hub</p>
+        <p class="text-sm">Empowering students through community-driven mentorship.</p>
+        <div class="mt-4 text-xs text-stone-500">&copy; 2026 Indigenomics Impact Creator Jam</div>
+    </footer>
+
+    <script>
+        async function loadProfile() {
+            const response = await fetch('/api/me');
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.href = '/login';
+                } else {
+                    document.getElementById('userName').textContent = 'Error loading profile';
+                    return;
+                }
+            }
+            const user = await response.json();
+            document.getElementById('userName').textContent = user.full_name;
+            document.getElementById('userRole').textContent = user.role.replace('_', ' ').toUpperCase();
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userSubject').textContent = user.subject || 'Not specified';
+            document.getElementById('userLanguage').textContent = user.language || 'Not specified';
+            document.getElementById('userJoined').textContent = user.created_at;
+            
+            // Badge color
+            const badge = document.getElementById('userBadge');
+            if (user.role === 'volunteer') {
+                badge.textContent = 'Volunteer Tutor';
+                badge.className = 'inline-block bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full';
+            } else if (user.role === 'student_parent') {
+                badge.textContent = 'Student / Parent';
+                badge.className = 'inline-block bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full';
+            } else {
+                badge.textContent = 'Administrator';
+                badge.className = 'inline-block bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full';
+            }
+
+            // Show edit button for volunteers
+            if (user.role === 'volunteer') {
+                document.getElementById('editBtn').classList.remove('hidden');
+                document.getElementById('volunteerStats').classList.remove('hidden');
+                document.getElementById('editSubject').value = user.subject || 'None';
+                document.getElementById('editLanguage').value = user.language || 'None';
+            }
+        }
+
+        loadProfile();
+
+        // Edit modal
+        const modal = document.getElementById('editModal');
+        document.getElementById('editBtn').addEventListener('click', () => modal.classList.remove('hidden'));
+        document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('editMsg');
+            const data = {
+                subject: document.getElementById('editSubject').value,
+                language: document.getElementById('editLanguage').value,
+            };
+            try {
+                // For now, we don't have an update API, so just show success
+                showToast('Profile updated! (API integration pending)', 'success');
+                modal.classList.add('hidden');
+            } catch (err) {
+                msgDiv.textContent = 'Failed to update profile';
+                msgDiv.className = 'mt-3 text-center p-3 rounded-lg text-sm bg-red-100 text-red-700';
+                msgDiv.classList.remove('hidden');
+            }
+        });
+
+        function showToast(message, type = 'info') {
+            const colors = { success: 'bg-green-100 text-green-700', error: 'bg-red-100 text-red-700', info: 'bg-blue-100 text-blue-700' };
+            const el = document.createElement('div');
+            el.className = `fixed top-4 right-4 ${colors[type]} px-4 py-3 rounded-xl shadow-lg z-50 text-sm font-medium`;
+            el.textContent = message;
+            document.body.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
+        }
+    </script>
+</body>
+</html>

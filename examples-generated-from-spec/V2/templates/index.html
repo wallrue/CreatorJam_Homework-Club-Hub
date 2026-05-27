@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Club Hub - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand"><strong>📚 Homework Club Hub</strong></div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/search">Find Tutors</a>
+            <a href="/login">Login</a>
+            <a href="/join" class="btn btn-secondary" style="color:white; margin-left:1rem">Join Now</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Bridging the Learning Gap Through Community</h1>
+            <p>Free, culturally resonant academic support for students in science and beyond.</p>
+            <div style="margin-top: 2rem;">
+                <a href="/join" class="btn btn-primary">Get Started Today</a>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>🎓 Radical Accessibility</h3>
+                <p>Financial status should never be a barrier to success. Our services are 100% free for students and parents.</p>
+            </div>
+            <div class="card">
+                <h3>🌍 Cultural Resonance</h3>
+                <p>We prioritize pairing students with tutors who share their language and background for better trust and learning.</p>
+            </div>
+            <div class="card">
+                <h3>🚀 Community Growth</h3>
+                <p>Volunteers build professional portfolios and give back to their community through structured support.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Homework Club Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-brand"><strong>📚 Homework Club Hub</strong></div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/search">Find Tutors</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <div id="profileContent">
+                <p>Loading profile...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadProfile() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            let endpoint = '/api/me';
+            
+            if (name) {
+                endpoint = `/api/profile?name=${encodeURIComponent(name)}`;
+            }
+
+            const response = await fetch(endpoint);
+            const user = await response.json();
+            const content = document.getElementById('profileContent');
+
+            if (response.ok) {
+                const roleBadge = user.role === 'volunteer' 
+                    ? '<span class="badge badge-volunteer">Verified Volunteer</span>' 
+                    : '<span class="badge badge-student">Student / Parent</span>';
+
+                content.innerHTML = `
+                    ${roleBadge}
+                    <h1 style="margin: 1rem 0 0.5rem 0;">${user.full_name}</h1>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">${user.email}</p>
+                    
+                    <div style="text-align: left; background: var(--primary-light); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <p><strong>Member Since:</strong> ${user.created_at}</p>
+                        <p><strong>Academic Focus:</strong> ${user.subject || 'General'}</p>
+                        <p><strong>Cultural Background:</strong> ${user.language || 'Not specified'}</p>
+                    </div>
+                    
+                    ${user.role === 'volunteer' ? 
+                        `<button class="btn btn-primary" style="width: 100%;">Request a Session</button>` : 
+                        `<a href="/search" class="btn btn-secondary" style="width: 100%; text-align: center;">Find a Tutor</a>`
+                    }
+                `;
+            } else {
+                content.innerHTML = `<p style="color: var(--error-color);">Error: ${user.error}</p>`;
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Club | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-stone-200 max-h-[90vh] overflow-y-auto">
+        <div class="text-center mb-6">
+            <a href="/" class="inline-block mb-3">
+                <span class="text-4xl">📚</span>
+            </a>
+            <h1 class="text-3xl font-bold text-emerald-800 mb-1">Join the Club</h1>
+            <p class="text-stone-600 text-sm">Create your account to start learning or volunteering.</p>
+        </div>
+        
+        <form id="joinForm" class="space-y-3">
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">Full Name *</label>
+                <input type="text" id="full_name" required class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Your full name">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">Email Address *</label>
+                <input type="email" id="email" required class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="you@example.com">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">Password *</label>
+                <input type="password" id="password" required minlength="6" class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="At least 6 characters">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">I am a... *</label>
+                <select id="role" required class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="student_parent">Student / Parent</option>
+                    <option value="volunteer">Volunteer Tutor</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">Subject *</label>
+                <select id="subject" required class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="None">None / General</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="English">English</option>
+                    <option value="General">General</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-stone-700 mb-1">Language / Cultural Background *</label>
+                <select id="language" required class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="None">None / General</option>
+                    <option value="Indigenous / First Nations">Indigenous / First Nations</option>
+                    <option value="Spanish Speaking">Spanish Speaking</option>
+                    <option value="Mandarin Speaking">Mandarin Speaking</option>
+                    <option value="Arabic Speaking">Arabic Speaking</option>
+                    <option value="French Speaking">French Speaking</option>
+                    <option value="English Speaking">English Speaking</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition shadow-lg mt-4">
+                Create Account
+            </button>
+        </form>
+        <div id="message" class="mt-3 text-center hidden p-3 rounded-lg text-sm"></div>
+        <div class="text-center mt-4 pt-4 border-t border-stone-100">
+            <a href="/" class="text-sm text-stone-500 hover:text-emerald-700 transition">← Back to Home</a>
+            <span class="text-stone-300"> | </span>
+            <a href="/login" class="text-sm text-stone-500 hover:text-emerald-700 transition">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('joinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            const data = {
+                full_name: document.getElementById('full_name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+                subject: document.getElementById('subject').value,
+                language: document.getElementById('language').value,
+            };
+            msgDiv.classList.remove('hidden');
+            msgDiv.textContent = 'Creating account...';
+            msgDiv.className = 'mt-3 text-center p-3 rounded-lg text-sm bg-blue-100 text-blue-700';
+            try {
+                const response = await fetch('/api/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    msgDiv.textContent = result.message + ' Redirecting to login...';
+                    msgDiv.className = 'mt-3 text-center p-3 rounded-lg text-sm bg-green-100 text-green-700';
+                    document.getElementById('joinForm').reset();
+                    setTimeout(() => window.location.href = '/login', 2000);
+                } else {
+                    msgDiv.textContent = result.error || 'Something went wrong';
+                    msgDiv.className = 'mt-3 text-center p-3 rounded-lg text-sm bg-red-100 text-red-700';
+                }
+            } catch (err) {
+                msgDiv.textContent = 'Server connection failed';
+                msgDiv.className = 'mt-3 text-center p-3 rounded-lg text-sm bg-red-100 text-red-700';
+            }
+        });
+    </script>
+</body>
+</html>

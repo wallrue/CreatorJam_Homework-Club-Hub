@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Club | Homework Club Hub</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e67e22;
+            --light: #f4f7f6;
+            --text: #333;
+            --white: #ffffff;
+            --error: #e74c3c;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--white);
+        }
+        .join-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        .role-option.active {
+            border-color: var(--secondary);
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #d35400;
+        }
+        #message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+        }
+        .msg-success { background: #d4edda; color: #155724; display: block !important; }
+        .msg-error { background: #f8d7da; color: #721c24; display: block !important; }
+        .footer-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer-link a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">📚 Homework Club Hub</a>
+        <nav>
+            <a href="/" style="color: white; text-decoration: none;">Home</a>
+        </nav>
+    </header>
+
+    <div class="join-container">
+        <h2>Join the Community</h2>
+        
+        <div class="role-selector">
+            <div class="role-option active" onclick="setRole('student_parent', this)">Student / Parent</div>
+            <div class="role-option" onclick="setRole('volunteer', this)">Volunteer Tutor</div>
+        </div>
+
+        <form id="joinForm">
+            <input type="hidden" id="role" name="role" value="student_parent">
+            
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="you@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a secure password">
+            </div>
+
+            <div class="form-group">
+                <label for="subject" id="subjectLabel">Subject Needed</label>
+                <input type="text" id="subject" name="subject" required placeholder="e.g. Chemistry, Biology, Math">
+            </div>
+
+            <div class="form-group">
+                <label for="language">Language / Cultural Preference</label>
+                <input type="text" id="language" name="language" required placeholder="e.g. Spanish, Cree, Mandarin">
+            </div>
+
+            <button type="submit" class="btn-submit">Create My Profile</button>
+        </form>
+
+        <div id="message"></div>
+
+        <div class="footer-link">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+    </div>
+
+    <script>
+        function setRole(role, element) {
+            document.getElementById('role').value = role;
+            
+            // Update UI
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Update labels based on role
+            const subjectLabel = document.getElementById('subjectLabel');
+            const subjectInput = document.getElementById('subject');
+            
+            if (role === 'volunteer') {
+                subjectLabel.innerText = 'Your Expertise (Subjects)';
+                subjectInput.placeholder = 'e.g. Advanced Physics, Calculus';
+            } else {
+                subjectLabel.innerText = 'Subject Needed';
+                subjectInput.placeholder = 'e.g. Chemistry, Biology, Math';
+            }
+        }
+
+        document.getElementById('joinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            msgDiv.className = '';
+            msgDiv.innerText = 'Processing...';
+            msgDiv.style.display = 'block';
+
+            const formData = {
+                full_name: document.getElementById('full_name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+                subject: document.getElementById('subject').value,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch('/api/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgDiv.className = 'msg-success';
+                    msgDiv.innerText = result.message;
+                    setTimeout(() => window.location.href = '/login', 2000);
+                } else {
+                    msgDiv.className = 'msg-error';
+                    msgDiv.innerText = result.error || 'Something went wrong';
+                }
+            } catch (err) {
+                msgDiv.className = 'msg-error';
+                msgDiv.innerText = 'Network error. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

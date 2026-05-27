@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-indigo-600 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span class="hidden sm:inline">Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="/join" class="text-gray-600 hover:text-indigo-600 font-medium transition">Need an account? Join here</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div class="bg-indigo-600 py-8 px-6 text-center text-white">
+                <h1 class="text-2xl font-bold mb-2">Welcome Back</h1>
+                <p class="text-indigo-100">Login to access your academic community</p>
+            </div>
+
+            <div class="p-8">
+                <form id="loginForm" class="space-y-5">
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" id="email" name="email" required 
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
+                                placeholder="name@example.com">
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" name="password" required 
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg flex items-center justify-center gap-2">
+                        Sign In <i class="fas fa-sign-in-alt text-sm"></i>
+                    </button>
+                </form>
+
+                <!-- Message Area -->
+                <div id="message" class="mt-4 text-center text-sm hidden"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-6 text-center text-gray-500 text-xs">
+        &copy; 2026 Homework Club Hub. All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            msgDiv.classList.add('hidden');
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgDiv.textContent = result.message;
+                    msgDiv.className = 'mt-4 text-center text-sm text-green-600 font-medium';
+                    msgDiv.classList.remove('hidden');
+                    setTimeout(() => window.location.href = '/search', 1500);
+                } else {
+                    msgDiv.textContent = result.error || 'Invalid login credentials';
+                    msgDiv.className = 'mt-4 text-center text-sm text-red-600 font-medium';
+                    msgDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                msgDiv.textContent = 'Network error. Please try again.';
+                msgDiv.className = 'mt-4 text-center text-sm text-red-600 font-medium';
+                msgDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
