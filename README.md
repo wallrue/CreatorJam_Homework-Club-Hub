@@ -58,7 +58,7 @@ cd CreatorJam_Homework-Club-Hub
 **Below are the steps to design the new interface (if you just want to run the current website, skip Step 2)**
 
 ### Step 2: Launch the Hermes
-Open your preferred terminal:
+Delete homework-club-prototype folder, open your preferred terminal:
 ```bash
 cd \path\to\CreatorJam_Homework-Club-Hub
 Hermes
