@@ -51,8 +51,8 @@ hermes
 ### Step 1: Clone & Switch Branches
 Open your preferred terminal:
 ```bash
-git clone [https://github.com/indigenomicsxyz/CreatorJamSpecKit.git](https://github.com/indigenomicsxyz/CreatorJamSpecKit.git)  
-cd CreatorJamSpecKit
+git clone https://github.com/wallrue/CreatorJam_Homework-Club-Hub.git
+cd CreatorJam_Homework-Club-Hub
 git switch team-2
 ```
 
@@ -61,9 +61,9 @@ git switch team-2
 ### Step 2: Launch the Hermes
 Open your preferred terminal:
 ```bash
-cd \path\to\CreatorJamSpecKit
+cd \path\to\CreatorJam_Homework-Club-Hub
 Hermes
-The spec is in CreatorJamSpecKit\specs\homework-club-hub\vision-spec, the database is homework_club_hub.db, backend is app.py, please design the front-end pages based on vision-spec
+The spec is in specs\homework-club-hub\vision-spec, the database is homework_club_hub.db, backend is app.py, please design the front-end pages based on vision-spec
 ```
 Troubleshooting:
 - If you encounter a time-out problem, please close/restart your terminal and try executing Step 2 again.
@@ -72,7 +72,7 @@ Troubleshooting:
 ### Step 3: Start the Backend Server Application
 Open an Anaconda Prompt (or your primary terminal with Python environment):
 ```bash
-cd <CreatorJamSpecKit>
+cd \path\to\CreatorJam_Homework-Club-Hub
 python app.py
 ```
 Then access: http://localhost:5000/
