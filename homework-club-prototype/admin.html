@@ -5,316 +5,342 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Homework Club Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-900">
-    <nav class="bg-white border-b border-stone-100 sticky top-0 z-50">
-        <div class="p-4 md:p-6 flex justify-between items-center max-w-7xl mx-auto">
-            <a href="/" class="text-xl md:text-2xl font-bold text-emerald-800 flex items-center gap-2">
-                <span class="text-3xl">📚</span>
-                <span class="hidden sm:inline">Homework Club Hub</span>
-            </a>
-            <div id="nav-links" class="space-x-1 md:space-x-6 flex items-center">
-                <a href="/search" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">Find a Tutor</a>
-                <a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">My Sessions</a>
-                <a href="/logout" class="bg-red-50 text-red-700 px-4 py-2 rounded-full font-semibold text-sm hover:bg-red-100 transition">Logout</a>
+<body class="bg-stone-50 text-stone-900 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-6" id="nav-links">
+                    <!-- Links injected by updateNav() -->
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-stone-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+            <a href="/" class="block text-stone-600 hover:text-emerald-700 font-medium">Home</a>
+            <a href="/search" class="block text-stone-600 hover:text-emerald-700 font-medium">Find a Tutor</a>
+            <a href="/logout" class="block text-red-600 hover:text-red-800 font-medium">Logout</a>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-12 px-4">
         <div class="mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold mb-1">Admin Dashboard</h1>
-            <p class="text-stone-600 text-sm">Monitor platform health, manage users, and review activity</p>
+            <h1 class="text-3xl font-bold text-stone-900 mb-1">Admin Dashboard</h1>
+            <p class="text-stone-600">Monitor platform health, manage users, and verify volunteers.</p>
         </div>
 
-        <!-- Admin Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
-            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl md:text-3xl font-bold text-emerald-700" id="statUsers">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Total Users</p>
-            </div>
-            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl md:text-3xl font-bold text-blue-600" id="statVolunteers">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Volunteers</p>
-            </div>
-            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl md:text-3xl font-bold text-purple-600" id="statStudents">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Students/Parents</p>
-            </div>
-            <div class="bg-white p-4 md:p-5 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl md:text-3xl font-bold text-amber-600" id="statSessions">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Sessions</p>
-            </div>
-        </div>
-
-        <!-- Admin Tabs -->
-        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
-            <button class="admin-tab active px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-700 text-white whitespace-nowrap" data-tab="users">Users</button>
-            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="sessions">Sessions</button>
-            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="volunteers">Volunteer Vetting</button>
-            <button class="admin-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-tab="reports">Reports</button>
-        </div>
-
-        <!-- Users Tab -->
-        <div id="tab-users" class="admin-panel">
-            <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden">
-                <div class="p-4 md:p-5 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <h2 class="font-bold text-lg">All Users</h2>
-                    <div class="relative">
-                        <input type="text" id="userSearch" placeholder="Search users..." class="pl-9 pr-4 py-2 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none text-sm w-full sm:w-64">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">🔍</span>
+        <!-- Stats Cards -->
+        <div id="stats-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
+                        <i class="fas fa-users"></i>
                     </div>
+                    <span class="text-sm text-stone-500 font-medium">Total Users</span>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-stone-50">
-                            <tr>
-                                <th class="text-left p-4 font-semibold text-stone-600">Name</th>
-                                <th class="text-left p-4 font-semibold text-stone-600">Email</th>
-                                <th class="text-left p-4 font-semibold text-stone-600">Role</th>
-                                <th class="text-left p-4 font-semibold text-stone-600 hidden md:table-cell">Subject</th>
-                                <th class="text-left p-4 font-semibold text-stone-600 hidden md:table-cell">Language</th>
-                                <th class="text-left p-4 font-semibold text-stone-600 hidden lg:table-cell">Joined</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-table-body">
-                            <!-- Users injected by JS -->
-                        </tbody>
-                    </table>
-                </div>
+                <p id="stat-total" class="text-3xl font-bold text-stone-800">—</p>
             </div>
-        </div>
-
-        <!-- Sessions Tab -->
-        <div id="tab-sessions" class="admin-panel hidden">
-            <div class="bg-white rounded-2xl border border-stone-200 p-6">
-                <h2 class="font-bold text-lg mb-4">Session Overview</h2>
-                <p class="text-stone-500 text-sm mb-4">Upcoming and recent sessions across the platform.</p>
-                <div id="admin-sessions-list" class="space-y-3">
-                    <!-- Admin sessions injected by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Volunteer Vetting Tab -->
-        <div id="tab-volunteers" class="admin-panel hidden">
-            <div class="bg-white rounded-2xl border border-stone-200 p-6">
-                <h2 class="font-bold text-lg mb-4">Volunteer Vetting Queue</h2>
-                <p class="text-stone-500 text-sm mb-4">Review and verify new volunteer tutors.</p>
-                <div id="vetting-list" class="space-y-3">
-                    <!-- Vetting items injected by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Reports Tab -->
-        <div id="tab-reports" class="admin-panel hidden">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-2xl border border-stone-200 p-6">
-                    <h2 class="font-bold text-lg mb-4">Subject Distribution</h2>
-                    <div id="subject-chart" class="space-y-3">
-                        <!-- Subject bars injected by JS -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700">
+                        <i class="fas fa-chalkboard-teacher"></i>
                     </div>
+                    <span class="text-sm text-stone-500 font-medium">Volunteers</span>
                 </div>
-                <div class="bg-white rounded-2xl border border-stone-200 p-6">
-                    <h2 class="font-bold text-lg mb-4">Language/Cultural Distribution</h2>
-                    <div id="language-chart" class="space-y-3">
-                        <!-- Language bars injected by JS -->
+                <p id="stat-volunteers" class="text-3xl font-bold text-stone-800">—</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center text-amber-700">
+                        <i class="fas fa-child"></i>
                     </div>
+                    <span class="text-sm text-stone-500 font-medium">Students/Parents</span>
                 </div>
+                <p id="stat-students" class="text-3xl font-bold text-stone-800">—</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-700">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span class="text-sm text-stone-500 font-medium">Verified</span>
+                </div>
+                <p id="stat-verified" class="text-3xl font-bold text-stone-800">—</p>
+            </div>
+        </div>
+
+        <!-- Subject & Language Distributions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <h3 class="font-bold text-lg mb-4 text-stone-800">Subject Distribution</h3>
+                <div id="subject-dist" class="space-y-3">
+                    <p class="text-stone-400 text-sm">Loading...</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                <h3 class="font-bold text-lg mb-4 text-stone-800">Language Distribution</h3>
+                <div id="language-dist" class="space-y-3">
+                    <p class="text-stone-400 text-sm">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-6 border-b border-stone-200">
+                <h3 class="font-bold text-lg text-stone-800">All Users</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-stone-50 text-stone-600 text-left">
+                            <th class="px-6 py-3 font-semibold">Name</th>
+                            <th class="px-6 py-3 font-semibold">Email</th>
+                            <th class="px-6 py-3 font-semibold">Role</th>
+                            <th class="px-6 py-3 font-semibold">Subject</th>
+                            <th class="px-6 py-3 font-semibold">Language</th>
+                            <th class="px-6 py-3 font-semibold">Verified</th>
+                            <th class="px-6 py-3 font-semibold">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center text-stone-400">
+                                <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                                <p>Loading users...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 
-    <footer class="bg-stone-800 text-stone-300 py-8 mt-12 px-6 text-center">
-        <p class="mb-4 font-bold text-white">Homework Club Hub</p>
-        <p class="text-sm">Empowering students through community-driven mentorship.</p>
-        <div class="mt-4 text-xs text-stone-500">&copy; 2026 Indigenomics Impact Creator Jam</div>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Homework Club Hub</span>
+            </div>
+            <p class="text-stone-500 text-sm">&copy; 2026 Homework Club Hub. Powered by Indigenomics.</p>
+        </div>
     </footer>
 
     <script>
-        function showToast(message, type = 'info') {
-            const colors = { success: 'bg-green-100 text-green-700', error: 'bg-red-100 text-red-700', info: 'bg-blue-100 text-blue-700', warning: 'bg-amber-100 text-amber-700' };
-            const el = document.createElement('div');
-            el.className = `fixed top-4 right-4 ${colors[type]} px-4 py-3 rounded-xl shadow-lg z-50 text-sm font-medium`;
-            el.textContent = message;
-            document.body.appendChild(el);
-            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
-        }
-
-        // Tab switching
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.admin-tab').forEach(t => {
-                    t.classList.remove('bg-emerald-700', 'text-white');
-                    t.classList.add('bg-white', 'text-stone-600', 'border', 'border-stone-200');
-                });
-                tab.classList.remove('bg-white', 'text-stone-600', 'border', 'border-stone-200');
-                tab.classList.add('bg-emerald-700', 'text-white');
-                
-                document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
-                document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
-            });
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
-        // Mock data
-        const users = [
-            { user_id: 1, full_name: 'Jane Doe', email: 'jane@example.com', role: 'student_parent', subject: 'Chemistry', language: 'Spanish Speaking', created_at: '2026-05-25 21:25:29' },
-            { user_id: 2, full_name: 'Dr. Smith', email: 'smith@example.com', role: 'volunteer', subject: 'Biology', language: 'French Speaking', created_at: '2026-05-25 21:25:29' },
-            { user_id: 3, full_name: 'Maria Garcia', email: 'maria@example.com', role: 'volunteer', subject: 'Chemistry', language: 'Spanish Speaking', created_at: '2026-05-25 21:25:29' },
-            { user_id: 4, full_name: 'Admin User', email: 'admin@example.com', role: 'admin', subject: null, language: null, created_at: '2026-05-25 21:25:29' },
-            { user_id: 6, full_name: 'Donald Trump', email: 'trump@example.com', role: 'volunteer', subject: 'Mathematics', language: 'English Speaking', created_at: '2026-05-26 06:00:22' },
-            { user_id: 7, full_name: 'Elon Musk', email: 'musk@example.com', role: 'volunteer', subject: 'Physics', language: 'French Speaking', created_at: '2026-05-26 09:19:29' },
-            { user_id: 8, full_name: 'Ben', email: 'extraxim@gmail.com', role: 'student_parent', subject: 'Mathematics', language: 'French Speaking', created_at: '2026-05-26 10:34:25' },
-        ];
-
-        const mockSessions = [
-            { id: 1, student: 'Sofia', tutor: 'Maria Garcia', date: '2026-06-01', time: '15:00', status: 'pending', subject: 'Chemistry' },
-            { id: 2, student: 'James', tutor: 'Dr. Smith', date: '2025-12-15', time: '10:00', status: 'confirmed', subject: 'Biology' },
-            { id: 3, student: 'Isabella', tutor: 'Maria Garcia', date: '2025-12-01', time: '14:00', status: 'completed', subject: 'Chemistry', rating: 5 },
-            { id: 4, student: 'Lucas', tutor: 'Dr. Smith', date: '2025-11-20', time: '16:00', status: 'cancelled', subject: 'Biology' },
-        ];
-
-        // Render users table
-        function renderUsers(filter = '') {
-            const filtered = users.filter(u => 
-                u.full_name.toLowerCase().includes(filter.toLowerCase()) ||
-                u.email.toLowerCase().includes(filter.toLowerCase()) ||
-                u.role.toLowerCase().includes(filter.toLowerCase())
-            );
-            
-            const roleColors = {
-                volunteer: 'bg-blue-100 text-blue-700',
-                student_parent: 'bg-purple-100 text-purple-700',
-                admin: 'bg-red-100 text-red-700'
-            };
-
-            document.getElementById('users-table-body').innerHTML = filtered.map(u => `
-                <tr class="border-b border-stone-50 hover:bg-stone-50 transition">
-                    <td class="p-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-xs font-bold text-emerald-700 shrink-0">
-                                ${u.full_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
-                            </div>
-                            <span class="font-medium">${u.full_name}</span>
-                        </div>
-                    </td>
-                    <td class="p-4 text-stone-600">${u.email}</td>
-                    <td class="p-4"><span class="text-xs font-semibold px-2.5 py-1 rounded-full ${roleColors[u.role]}">${u.role.replace('_', ' ')}</span></td>
-                    <td class="p-4 text-stone-600 hidden md:table-cell">${u.subject || '—'}</td>
-                    <td class="p-4 text-stone-600 hidden md:table-cell">${u.language || '—'}</td>
-                    <td class="p-4 text-stone-500 hidden lg:table-cell">${u.created_at.split(' ')[0]}</td>
-                </tr>
-            `).join('');
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
-        // Admin sessions
-        function renderAdminSessions() {
-            const statusColors = { pending: 'bg-amber-100 text-amber-700', confirmed: 'bg-blue-100 text-blue-700', completed: 'bg-emerald-100 text-emerald-700', cancelled: 'bg-red-100 text-red-700' };
-            document.getElementById('admin-sessions-list').innerHTML = mockSessions.map(s => `
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-stone-50 rounded-xl">
-                    <div class="flex-1">
-                        <p class="font-medium text-sm">${s.student} → ${s.tutor}</p>
-                        <p class="text-xs text-stone-500">${s.date} at ${s.time} • ${s.subject}</p>
-                    </div>
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${statusColors[s.status]} shrink-0">${s.status}</span>
-                </div>
-            `).join('');
+        // Role-based navigation
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/" class="text-stone-600 hover:text-emerald-700 font-medium transition">Home</a>';
+                    links += '<a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>';
+                    links += '<a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Sessions</a>';
+                    links += '<a href="/my-profile" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Profile</a>';
+                    links += '<a href="/logout" class="text-red-600 hover:text-red-800 font-medium transition"><i class="fas fa-sign-out-alt"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) { /* stays as guest links */ }
         }
 
-        // Vetting queue
-        function renderVetting() {
-            const volunteers = users.filter(u => u.role === 'volunteer');
-            document.getElementById('vetting-list').innerHTML = volunteers.map(v => `
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-stone-50 rounded-xl">
-                    <div class="flex items-center gap-3 flex-1">
-                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-700 shrink-0">
-                            ${v.full_name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
-                        </div>
+        // Load admin stats
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/admin/stats');
+                if (!response.ok) return;
+                const stats = await response.json();
+
+                document.getElementById('stat-total').textContent = stats.total_users;
+                document.getElementById('stat-volunteers').textContent = stats.volunteers;
+                document.getElementById('stat-students').textContent = stats.students;
+
+                // Calculate verified count
+                let verified = 0;
+                if (stats.verified) {
+                    verified = stats.verified;
+                }
+                document.getElementById('stat-verified').textContent = verified;
+
+                // Subject distribution
+                const subjectContainer = document.getElementById('subject-dist');
+                if (stats.subjects && stats.subjects.length > 0) {
+                    const maxCount = Math.max(...stats.subjects.map(s => s.count));
+                    subjectContainer.innerHTML = stats.subjects.map(s => `
                         <div>
-                            <p class="font-medium text-sm">${v.full_name}</p>
-                            <p class="text-xs text-stone-500">${v.subject} • ${v.language}</p>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-stone-700">${s.subject}</span>
+                                <span class="text-stone-500">${s.count}</span>
+                            </div>
+                            <div class="w-full bg-stone-100 rounded-full h-2">
+                                <div class="bg-emerald-600 h-2 rounded-full" style="width: ${(s.count / maxCount) * 100}%"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex gap-2 shrink-0">
-                        <button onclick="verifyVolunteer('${v.email}')" class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition">✓ Verify</button>
-                        <button class="bg-red-50 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-red-100 transition">Reject</button>
-                    </div>
-                </div>
-            `).join('');
+                    `).join('');
+                } else {
+                    subjectContainer.innerHTML = '<p class="text-stone-400 text-sm">No subject data yet.</p>';
+                }
+
+                // Language distribution
+                const langContainer = document.getElementById('language-dist');
+                if (stats.languages && stats.languages.length > 0) {
+                    const maxCount = Math.max(...stats.languages.map(l => l.count));
+                    langContainer.innerHTML = stats.languages.map(l => `
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-stone-700">${l.language}</span>
+                                <span class="text-stone-500">${l.count}</span>
+                            </div>
+                            <div class="w-full bg-stone-100 rounded-full h-2">
+                                <div class="bg-emerald-600 h-2 rounded-full" style="width: ${(l.count / maxCount) * 100}%"></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    langContainer.innerHTML = '<p class="text-stone-400 text-sm">No language data yet.</p>';
+                }
+
+            } catch (err) {
+                console.error('Stats error:', err);
+            }
         }
 
-        window.verifyVolunteer = function(email) {
-            showToast(`Volunteer ${email} marked as verified!`, 'success');
+        // Load users table
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                if (!response.ok) return;
+                const users = await response.json();
+
+                const tbody = document.getElementById('users-table-body');
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-stone-400">No users registered yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = users.map(u => `
+                    <tr class="border-t border-stone-100 hover:bg-stone-50">
+                        <td class="px-6 py-4 font-medium text-stone-800">${u.full_name}</td>
+                        <td class="px-6 py-4 text-stone-600">${u.email}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-bold uppercase ${u.role === 'volunteer' ? 'bg-blue-100 text-blue-800' : u.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}">${u.role.replace('_', ' ')}</span>
+                        </td>
+                        <td class="px-6 py-4 text-stone-600">${u.subject || '—'}</td>
+                        <td class="px-6 py-4 text-stone-600">${u.language || '—'}</td>
+                        <td class="px-6 py-4">
+                            ${u.is_verified ? '<span class="text-emerald-600"><i class="fas fa-check-circle"></i> Verified</span>' : '<span class="text-stone-400">Not verified</span>'}
+                        </td>
+                        <td class="px-6 py-4">
+                            ${u.role === 'volunteer' && !u.is_verified ? `
+                                <button onclick="verifyVolunteer(${u.user_id})" class="text-emerald-700 font-medium hover:underline text-sm">
+                                    <i class="fas fa-check"></i> Verify
+                                </button>
+                            ` : '<span class="text-stone-400 text-sm">—</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error('Users error:', err);
+                document.getElementById('users-table-body').innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Error loading users.</td></tr>';
+            }
+        }
+
+        // Verify volunteer
+        window.verifyVolunteer = async function(userId) {
+            if (!confirm('Verify this volunteer? This will add a "Verified" badge to their profile.')) return;
+
+            try {
+                const response = await fetch(`/api/admin/users/${userId}/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    showToast('Volunteer verified successfully!', 'success');
+                    loadStats();
+                    loadUsers();
+                } else {
+                    const result = await response.json();
+                    showToast(result.error || 'Verification failed', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+            }
         };
 
-        // Reports charts
-        function renderReports() {
-            // Subject distribution
-            const subjectCounts = {};
-            users.forEach(u => {
-                if (u.subject && u.subject !== 'None') {
-                    subjectCounts[u.subject] = (subjectCounts[u.subject] || 0) + 1;
+        // Init - auth guard + load data
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/me');
+                if (!response.ok || response.status === 401) {
+                    window.location.href = '/login';
+                    return false;
                 }
-            });
-            const maxSubject = Math.max(...Object.values(subjectCounts), 1);
-            const colors = ['bg-emerald-500', 'bg-blue-500', 'bg-purple-500', 'bg-amber-500', 'bg-red-500'];
-            
-            document.getElementById('subject-chart').innerHTML = Object.entries(subjectCounts).map(([subject, count], i) => `
-                <div>
-                    <div class="flex justify-between text-sm mb-1">
-                        <span class="font-medium">${subject}</span>
-                        <span class="text-stone-500">${count} user${count !== 1 ? 's' : ''}</span>
-                    </div>
-                    <div class="h-3 bg-stone-100 rounded-full overflow-hidden">
-                        <div class="${colors[i % colors.length]} h-full rounded-full transition-all" style="width: ${(count / maxSubject) * 100}%"></div>
-                    </div>
-                </div>
-            `).join('');
-
-            // Language distribution
-            const langCounts = {};
-            users.forEach(u => {
-                if (u.language && u.language !== 'None') {
-                    langCounts[u.language] = (langCounts[u.language] || 0) + 1;
+                const user = await response.json();
+                if (user.role !== 'admin') {
+                    window.location.href = '/';
+                    return false;
                 }
-            });
-            const maxLang = Math.max(...Object.values(langCounts), 1);
-            
-            document.getElementById('language-chart').innerHTML = Object.entries(langCounts).map(([lang, count], i) => `
-                <div>
-                    <div class="flex justify-between text-sm mb-1">
-                        <span class="font-medium">${lang}</span>
-                        <span class="text-stone-500">${count} user${count !== 1 ? 's' : ''}</span>
-                    </div>
-                    <div class="h-3 bg-stone-100 rounded-full overflow-hidden">
-                        <div class="${colors[i % colors.length]} h-full rounded-full transition-all" style="width: ${(count / maxLang) * 100}%"></div>
-                    </div>
-                </div>
-            `).join('');
+                return true;
+            } catch (err) {
+                window.location.href = '/login';
+                return false;
+            }
         }
 
-        // Update stats
-        document.getElementById('statUsers').textContent = users.length;
-        document.getElementById('statVolunteers').textContent = users.filter(u => u.role === 'volunteer').length;
-        document.getElementById('statStudents').textContent = users.filter(u => u.role === 'student_parent').length;
-        document.getElementById('statSessions').textContent = mockSessions.length;
-
-        // Search
-        document.getElementById('userSearch').addEventListener('input', (e) => {
-            renderUsers(e.target.value);
+        checkAuth().then(ok => {
+            if (ok) {
+                loadStats();
+                loadUsers();
+                updateNav();
+            }
         });
-
-        // Init
-        renderUsers();
-        renderAdminSessions();
-        renderVetting();
-        renderReports();
     </script>
 </body>
 </html>

@@ -133,15 +133,41 @@ def login():
     
     return jsonify({'error': 'Invalid email or password'}), 401
 
-@app.route('/api/me')
-def get_me():
+@app.route('/api/me', methods=['GET', 'PUT'])
+def manage_me():
     if 'user_id' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
-    
+
+    if request.method == 'PUT':
+        # Profile update
+        data = request.get_json()
+        updates = []
+        params = []
+
+        if 'subject' in data:
+            updates.append('subject = ?')
+            params.append(data['subject'])
+        if 'language' in data:
+            updates.append('language = ?')
+            params.append(data['language'])
+        if 'bio' in data:
+            updates.append('bio = ?')
+            params.append(data['bio'])
+
+        if updates:
+            params.append(session['user_id'])
+            conn = get_db_connection()
+            conn.execute(f'UPDATE users SET {", ".join(updates)} WHERE user_id = ?', params)
+            conn.commit()
+            conn.close()
+            return jsonify({'message': 'Profile updated successfully'}), 200
+        return jsonify({'message': 'No changes to apply'}), 200
+
+    # GET - retrieve profile
     conn = get_db_connection()
     user = conn.execute('SELECT full_name, email, role, created_at, subject, language FROM users WHERE user_id = ?', (session['user_id'],)).fetchone()
     conn.close()
-    
+
     if user:
         return jsonify(dict(user))
     return jsonify({'error': 'User not found'}), 404

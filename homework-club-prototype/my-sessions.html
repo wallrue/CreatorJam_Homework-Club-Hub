@@ -5,363 +5,320 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Sessions | Homework Club Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-900">
-    <nav class="bg-white border-b border-stone-100 sticky top-0 z-50">
-        <div class="p-4 md:p-6 flex justify-between items-center max-w-7xl mx-auto">
-            <a href="/" class="text-xl md:text-2xl font-bold text-emerald-800 flex items-center gap-2">
-                <span class="text-3xl">📚</span>
-                <span class="hidden sm:inline">Homework Club Hub</span>
-            </a>
-            <div id="nav-links" class="space-x-1 md:space-x-6 flex items-center">
-                <a href="/search" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">Find a Tutor</a>
-                <a href="/my-profile" class="text-stone-600 hover:text-emerald-700 transition text-sm font-medium">My Profile</a>
-                <a href="/logout" class="bg-red-50 text-red-700 px-4 py-2 rounded-full font-semibold text-sm hover:bg-red-100 transition">Logout</a>
+<body class="bg-stone-50 text-stone-900 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-6" id="nav-links">
+                    <!-- Links injected by updateNav() -->
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-stone-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+            <a href="/" class="block text-stone-600 hover:text-emerald-700 font-medium">Home</a>
+            <a href="/search" class="block text-stone-600 hover:text-emerald-700 font-medium">Find a Tutor</a>
+            <a href="/logout" class="block text-red-600 hover:text-red-800 font-medium">Logout</a>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 md:px-6 py-8">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-12 px-4">
+        <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold mb-1">My Sessions</h1>
-                <p class="text-stone-600 text-sm">View and manage your tutoring sessions</p>
+                <h1 class="text-3xl font-bold text-stone-900 mb-1">My Sessions</h1>
+                <p class="text-stone-600">View and manage your tutoring sessions.</p>
             </div>
-            <a href="/search" class="bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-emerald-800 transition shadow inline-flex items-center gap-2 shrink-0">
-                <span>🔍</span> Find a Tutor
+            <a href="/search" class="bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-emerald-800 transition flex items-center gap-2 shrink-0">
+                <i class="fas fa-plus"></i> Find a Tutor
             </a>
-        </div>
-
-        <!-- Stats Row -->
-        <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8">
-            <div class="bg-white p-4 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl font-bold text-blue-600" id="statPending">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Pending</p>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl font-bold text-emerald-600" id="statConfirmed">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Confirmed</p>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-stone-200 text-center">
-                <p class="text-2xl font-bold text-stone-600" id="statCompleted">0</p>
-                <p class="text-xs text-stone-500 font-semibold uppercase mt-1">Completed</p>
-            </div>
-        </div>
-
-        <!-- Filter Tabs -->
-        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
-            <button class="filter-tab active px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-700 text-white whitespace-nowrap" data-filter="all">All Sessions</button>
-            <button class="filter-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-filter="pending">Pending</button>
-            <button class="filter-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-filter="confirmed">Confirmed</button>
-            <button class="filter-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-filter="completed">Completed</button>
-            <button class="filter-tab px-4 py-2 rounded-xl text-sm font-semibold bg-white text-stone-600 border border-stone-200 whitespace-nowrap" data-filter="cancelled">Cancelled</button>
         </div>
 
         <!-- Sessions List -->
         <div id="sessions-list" class="space-y-4">
-            <!-- Sessions injected by JS -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden text-center py-16">
-            <p class="text-5xl mb-4">📅</p>
-            <h3 class="text-xl font-bold text-stone-700 mb-2">No sessions yet</h3>
-            <p class="text-stone-500 text-sm mb-4">Book your first tutoring session to get started!</p>
-            <a href="/search" class="inline-block bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-800 transition">Find a Tutor</a>
-        </div>
-
-        <!-- Feedback Modal -->
-        <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">Rate Your Session</h2>
-                    <button id="closeFeedback" class="text-stone-400 hover:text-stone-600 text-2xl leading-none">&times;</button>
-                </div>
-                <div id="feedback-session-info" class="bg-emerald-50 p-4 rounded-xl mb-5">
-                    <p class="font-bold text-emerald-800" id="feedback-tutor-name">Tutor Name</p>
-                    <p class="text-sm text-emerald-600" id="feedback-session-details">Date & Time</p>
-                </div>
-                <form id="feedback-form" class="space-y-4">
-                    <input type="hidden" id="feedback-session-id">
-                    <div>
-                        <label class="block text-xs font-semibold text-stone-700 mb-2">Your Rating</label>
-                        <div id="star-rating" class="flex gap-1">
-                            <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 transition" data-rating="1">★</button>
-                            <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 transition" data-rating="2">★</button>
-                            <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 transition" data-rating="3">★</button>
-                            <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 transition" data-rating="4">★</button>
-                            <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 transition" data-rating="5">★</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-stone-700 mb-1">Written Feedback / Thank You Note</label>
-                        <textarea id="feedback-text" rows="4" class="w-full p-3 rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="What did you appreciate? What went well?"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition">Submit Feedback</button>
-                </form>
-                <div id="feedbackMsg" class="mt-3 text-center hidden p-3 rounded-lg text-sm"></div>
+            <div class="text-center py-12 text-stone-400">
+                <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                <p>Loading sessions...</p>
             </div>
         </div>
     </main>
 
-    <footer class="bg-stone-800 text-stone-300 py-8 mt-12 px-6 text-center">
-        <p class="mb-4 font-bold text-white">Homework Club Hub</p>
-        <p class="text-sm">Empowering students through community-driven mentorship.</p>
-        <div class="mt-4 text-xs text-stone-500">&copy; 2026 Indigenomics Impact Creator Jam</div>
+    <!-- Rating Modal -->
+    <div id="rating-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold mb-4">Rate This Session</h3>
+            <p class="text-stone-600 text-sm mb-4">How was your experience with this tutor?</p>
+            <form id="ratingForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Rating</label>
+                    <div class="flex gap-2" id="star-rating">
+                        <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 focus:text-amber-400" data-star="1">&#9733;</button>
+                        <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 focus:text-amber-400" data-star="2">&#9733;</button>
+                        <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 focus:text-amber-400" data-star="3">&#9733;</button>
+                        <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 focus:text-amber-400" data-star="4">&#9733;</button>
+                        <button type="button" class="text-3xl text-stone-300 hover:text-amber-400 focus:text-amber-400" data-star="5">&#9733;</button>
+                    </div>
+                    <input type="hidden" id="rating-value" value="0">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Feedback / Thank You Note</label>
+                    <textarea id="rating-feedback" rows="3"
+                        class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                        placeholder="Share your experience or say thank you..."></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="px-5 py-2.5 bg-emerald-700 text-white rounded-lg font-medium hover:bg-emerald-800 transition">Submit Rating</button>
+                    <button type="button" id="close-rating-btn" class="px-5 py-2.5 bg-stone-200 text-stone-700 rounded-lg font-medium hover:bg-stone-300 transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Homework Club Hub</span>
+            </div>
+            <p class="text-stone-500 text-sm">&copy; 2026 Homework Club Hub. Powered by Indigenomics.</p>
+        </div>
     </footer>
 
     <script>
-        let allSessions = [];
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Auth guard
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/me');
+                if (!response.ok) {
+                    window.location.href = '/login';
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                window.location.href = '/login';
+                return false;
+            }
+        }
+
+        // Role-based navigation
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/" class="text-stone-600 hover:text-emerald-700 font-medium transition">Home</a>';
+                    links += '<a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>';
+                    links += '<a href="/my-profile" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Profile</a>';
+                    if (user.role === 'admin') {
+                        links += '<a href="/admin" class="text-stone-600 hover:text-emerald-700 font-medium transition">Admin</a>';
+                    }
+                    links += '<a href="/logout" class="text-red-600 hover:text-red-800 font-medium transition"><i class="fas fa-sign-out-alt"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) { /* stays as guest links */ }
+        }
+
+        // Rating star selection
+        let currentRatingId = null;
         let selectedRating = 0;
 
-        // Filter tabs
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.filter-tab').forEach(t => {
-                    t.classList.remove('bg-emerald-700', 'text-white');
-                    t.classList.add('bg-white', 'text-stone-600', 'border', 'border-stone-200');
-                });
-                tab.classList.remove('bg-white', 'text-stone-600', 'border', 'border-stone-200');
-                tab.classList.add('bg-emerald-700', 'text-white');
-                renderSessions(tab.dataset.filter);
-            });
-        });
-
-        // Star rating
         document.querySelectorAll('#star-rating button').forEach(btn => {
             btn.addEventListener('click', () => {
-                selectedRating = parseInt(btn.dataset.rating);
-                updateStars(selectedRating);
+                selectedRating = parseInt(btn.dataset.star);
+                document.getElementById('rating-value').value = selectedRating;
+                document.querySelectorAll('#star-rating button').forEach(b => {
+                    b.classList.toggle('text-amber-400', parseInt(b.dataset.star) <= selectedRating);
+                    b.classList.toggle('text-stone-300', parseInt(b.dataset.star) > selectedRating);
+                });
             });
         });
 
-        function updateStars(rating) {
-            document.querySelectorAll('#star-rating button').forEach(btn => {
-                const r = parseInt(btn.dataset.rating);
-                btn.classList.toggle('text-amber-400', r <= rating);
-                btn.classList.toggle('text-stone-300', r > rating);
-            });
-        }
+        document.getElementById('close-rating-btn').addEventListener('click', () => {
+            document.getElementById('rating-modal').classList.add('hidden');
+        });
 
-        function formatDate(dateStr) {
-            if (!dateStr) return '—';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
+        // Submit rating
+        document.getElementById('ratingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const rating = parseInt(document.getElementById('rating-value').value);
+            const feedback = document.getElementById('rating-feedback').value;
 
-        function formatDateTime(dateStr, timeStr) {
-            const d = new Date(dateStr + (timeStr ? 'T' + timeStr : ''));
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
-        }
-
-        const statusColors = {
-            pending: 'bg-amber-100 text-amber-700',
-            confirmed: 'bg-blue-100 text-blue-700',
-            completed: 'bg-emerald-100 text-emerald-700',
-            cancelled: 'bg-red-100 text-red-700'
-        };
-
-        const statusIcons = {
-            pending: '⏳',
-            confirmed: '✅',
-            completed: '🎉',
-            cancelled: '❌'
-        };
-
-        function showToast(message, type = 'info') {
-            const colors = { success: 'bg-green-100 text-green-700', error: 'bg-red-100 text-red-700', info: 'bg-blue-100 text-blue-700', warning: 'bg-amber-100 text-amber-700' };
-            const el = document.createElement('div');
-            el.className = `fixed top-4 right-4 ${colors[type]} px-4 py-3 rounded-xl shadow-lg z-50 text-sm font-medium`;
-            el.textContent = message;
-            document.body.appendChild(el);
-            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
-        }
-
-        async function loadSessions() {
-            // Prototype: Generate mock sessions since we don't have sessions API yet
-            // In production, fetch from /api/sessions
-            
-            const mockSessions = [
-                {
-                    session_id: 1,
-                    tutor_name: 'Dr. Amara Okafor',
-                    tutor_subject: 'Chemistry',
-                    tutor_language: 'Igbo / English',
-                    date: '2026-06-01',
-                    time: '15:00',
-                    status: 'pending',
-                    student_name: 'Sofia',
-                    needs: 'Organic Chemistry - moles and stoichiometry',
-                    session_type: 'online',
-                    rating: null,
-                    feedback: null
-                },
-                {
-                    session_id: 2,
-                    tutor_name: 'Marcus Chen',
-                    tutor_subject: 'Physics',
-                    tutor_language: 'Mandarin / English',
-                    date: '2025-12-15',
-                    time: '10:00',
-                    status: 'confirmed',
-                    student_name: 'James',
-                    needs: 'Mechanics and Newton\'s Laws',
-                    session_type: 'online',
-                    rating: null,
-                    feedback: null
-                },
-                {
-                    session_id: 3,
-                    tutor_name: 'Elena Rodriguez',
-                    tutor_subject: 'Mathematics',
-                    tutor_language: 'Spanish / English',
-                    date: '2025-12-01',
-                    time: '14:00',
-                    status: 'completed',
-                    student_name: 'Isabella',
-                    needs: 'Algebra II review for upcoming test',
-                    session_type: 'online',
-                    rating: 5,
-                    feedback: 'Amazing tutor! Very patient and clear explanations.'
-                },
-                {
-                    session_id: 4,
-                    tutor_name: 'Dr. Smith',
-                    tutor_subject: 'Biology',
-                    tutor_language: 'French / English',
-                    date: '2025-11-20',
-                    time: '16:00',
-                    status: 'cancelled',
-                    student_name: 'Lucas',
-                    needs: 'Cell biology fundamentals',
-                    session_type: 'online',
-                    rating: null,
-                    feedback: null
-                }
-            ];
-
-            allSessions = mockSessions;
-            updateStats(allSessions);
-            renderSessions('all');
-        }
-
-        function updateStats(sessions) {
-            document.getElementById('statPending').textContent = sessions.filter(s => s.status === 'pending').length;
-            document.getElementById('statConfirmed').textContent = sessions.filter(s => s.status === 'confirmed').length;
-            document.getElementById('statCompleted').textContent = sessions.filter(s => s.status === 'completed').length;
-        }
-
-        function renderSessions(filter) {
-            const container = document.getElementById('sessions-list');
-            const emptyState = document.getElementById('empty-state');
-            
-            let filtered = filter === 'all' ? allSessions : allSessions.filter(s => s.status === filter);
-            
-            if (filtered.length === 0) {
-                container.innerHTML = '';
-                emptyState.classList.remove('hidden');
+            if (rating === 0) {
+                showToast('Please select a rating', 'error');
                 return;
             }
 
-            emptyState.classList.add('hidden');
-            
-            container.innerHTML = filtered.map(session => {
-                const statusClass = statusColors[session.status];
-                const icon = statusIcons[session.status];
-                const dateDisplay = formatDate(session.date);
-                const dateTime = formatDateTime(session.date, session.time);
-                const ratingStars = session.rating ? 
-                    '★'.repeat(session.rating) + '☆'.repeat(5 - session.rating) : null;
+            try {
+                const response = await fetch(`/api/sessions/${currentRatingId}/rate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rating, feedback })
+                });
 
-                return `
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 hover:shadow-md transition">
-                        <div class="flex flex-col sm:flex-row sm:items-start gap-4">
-                            <div class="flex-1">
-                                <div class="flex flex-wrap items-center gap-2 mb-2">
-                                    <h3 class="font-bold text-lg">${session.tutor_name}</h3>
-                                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${statusClass}">${icon} ${session.status.charAt(0).toUpperCase() + session.status.slice(1)}</span>
-                                    <span class="text-xs bg-stone-100 text-stone-600 px-2.5 py-1 rounded-full">${session.tutor_subject}</span>
+                if (response.ok) {
+                    showToast('Rating submitted! Thank you!', 'success');
+                    document.getElementById('rating-modal').classList.add('hidden');
+                    loadSessions();
+                } else {
+                    const result = await response.json();
+                    showToast(result.error || 'Failed to submit rating', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+            }
+        });
+
+        // Load and render sessions
+        async function loadSessions() {
+            const container = document.getElementById('sessions-list');
+            container.innerHTML = '<div class="text-center py-12 text-stone-400"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><p>Loading sessions...</p></div>';
+
+            try {
+                const response = await fetch('/api/sessions');
+                const sessions = await response.json();
+
+                if (sessions.error) {
+                    container.innerHTML = `<div class="text-center py-12 text-stone-400"><i class="fas fa-info-circle text-3xl mb-2"></i><p>${sessions.error}</p></div>`;
+                    return;
+                }
+
+                if (sessions.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-12 bg-white rounded-2xl border border-stone-200">
+                            <i class="fas fa-calendar-times text-5xl text-stone-200 mb-4"></i>
+                            <h3 class="text-xl font-bold text-stone-500 mb-2">No Sessions Yet</h3>
+                            <p class="text-stone-400 mb-6">You haven't booked any tutoring sessions.</p>
+                            <a href="/search" class="bg-emerald-700 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-emerald-800 transition inline-flex items-center gap-2">
+                                <i class="fas fa-search"></i> Find a Tutor
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = sessions.map(s => {
+                    const statusColor = s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
+                                       s.status === 'pending' ? 'bg-amber-100 text-amber-800' :
+                                       s.status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-stone-100 text-stone-800';
+
+                    return `
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-bold text-stone-800">Session with ${s.tutor_name}</h3>
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase ${statusColor}">${s.status}</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-stone-600">
+                                        <p><i class="fas fa-user w-5"></i> Student: ${s.student_name}</p>
+                                        <p><i class="fas fa-calendar w-5"></i> ${s.scheduled_time}</p>
+                                        <p><i class="fas fa-book w-5"></i> Needs: ${s.needs || 'Not specified'}</p>
+                                        <p><i class="fas fa-video w-5"></i> ${s.session_type || 'Online'}</p>
+                                    </div>
+                                    ${s.rating ? `<div class="mt-2 text-amber-500"><i class="fas fa-star"></i> ${'★'.repeat(s.rating)}${'☆'.repeat(5 - s.rating)} ${s.feedback ? ' - ' + s.feedback : ''}</div>` : ''}
                                 </div>
-                                <p class="text-sm text-stone-600 mb-2">${dateTime}</p>
-                                <p class="text-sm text-stone-500 mb-2">Student: <strong>${session.student_name}</strong></p>
-                                <p class="text-sm text-stone-500">Need: ${session.needs}</p>
-                                ${session.rating ? `<div class="mt-2 text-amber-400 text-lg">${ratingStars}</div>` : ''}
-                                ${session.feedback ? `<p class="text-sm text-stone-600 italic mt-1">"${session.feedback}"</p>` : ''}
-                            </div>
-                            <div class="flex flex-wrap gap-2 shrink-0">
-                                <a href="/profile?name=${encodeURIComponent(session.tutor_name)}" class="text-emerald-700 text-sm font-semibold hover:underline px-3 py-2 rounded-lg hover:bg-emerald-50 transition">View Profile</a>
-                                ${session.status === 'completed' && !session.rating ? `
-                                    <button onclick="openFeedback(${session.session_id})" class="bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-2 rounded-lg hover:bg-amber-200 transition">Rate Session</button>
-                                ` : ''}
-                                ${session.status === 'pending' ? `
-                                    <button onclick="cancelSession(${session.session_id})" class="bg-red-50 text-red-600 text-sm font-semibold px-3 py-2 rounded-lg hover:bg-red-100 transition">Cancel</button>
-                                ` : ''}
-                                ${session.session_type === 'online' ? '<span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">💻 Online</span>' : '<span class="text-xs bg-green-50 text-green-600 px-2 py-1 rounded">🏠 In-Person</span>'}
+                                <div class="flex gap-2 shrink-0">
+                                    ${!s.rating ? `<button onclick="openRating(${s.session_id})" class="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium hover:bg-amber-600 transition">Rate</button>` : ''}
+                                    ${s.status === 'pending' ? `<button onclick="cancelSession(${s.session_id})" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition">Cancel</button>` : ''}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+
+            } catch (err) {
+                container.innerHTML = '<div class="text-center py-12 text-red-500"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>Error loading sessions.</p></div>';
+            }
         }
 
-        window.openFeedback = function(sessionId) {
-            const session = allSessions.find(s => s.session_id === sessionId);
-            if (!session) return;
-
-            document.getElementById('feedback-session-id').value = sessionId;
-            document.getElementById('feedback-tutor-name').textContent = session.tutor_name;
-            document.getElementById('feedback-session-details').textContent = `${formatDate(session.date)} at ${session.time}`;
-            document.getElementById('feedback-text').value = session.feedback || '';
-            selectedRating = session.rating || 0;
-            updateStars(selectedRating);
-            
-            document.getElementById('feedback-modal').classList.remove('hidden');
+        // Open rating modal
+        window.openRating = function(sessionId) {
+            currentRatingId = sessionId;
+            selectedRating = 0;
+            document.getElementById('rating-value').value = '0';
+            document.getElementById('rating-feedback').value = '';
+            document.querySelectorAll('#star-rating button').forEach(b => {
+                b.classList.remove('text-amber-400');
+                b.classList.add('text-stone-300');
+            });
+            document.getElementById('rating-modal').classList.remove('hidden');
         };
 
-        document.getElementById('closeFeedback').addEventListener('click', () => {
-            document.getElementById('feedback-modal').classList.add('hidden');
-        });
-
-        document.getElementById('feedback-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'feedback-modal') {
-                document.getElementById('feedback-modal').classList.add('hidden');
-            }
-        });
-
-        document.getElementById('feedback-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const msgDiv = document.getElementById('feedbackMsg');
-            const sessionId = parseInt(document.getElementById('feedback-session-id').value);
-            const session = allSessions.find(s => s.session_id === sessionId);
-            
-            if (!session) return;
-
-            session.rating = selectedRating;
-            session.feedback = document.getElementById('feedback-text').value;
-            
-            showToast('Thank you for your feedback!', 'success');
-            document.getElementById('feedback-modal').classList.add('hidden');
-            renderSessions(document.querySelector('.filter-tab.active').dataset.filter);
-        });
-
-        window.cancelSession = function(sessionId) {
+        // Cancel session
+        window.cancelSession = async function(sessionId) {
             if (!confirm('Are you sure you want to cancel this session?')) return;
-            
-            const session = allSessions.find(s => s.session_id === sessionId);
-            if (session) {
-                session.status = 'cancelled';
-                showToast('Session cancelled', 'warning');
-                renderSessions(document.querySelector('.filter-tab.active').dataset.filter);
-                updateStats(allSessions);
+
+            try {
+                const response = await fetch(`/api/sessions/${sessionId}/cancel`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    showToast('Session cancelled', 'success');
+                    loadSessions();
+                } else {
+                    const result = await response.json();
+                    showToast(result.error || 'Failed to cancel', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
             }
         };
 
-        loadSessions();
+        // Init
+        checkAuth().then(ok => {
+            if (ok) {
+                loadSessions();
+                updateNav();
+            }
+        });
     </script>
 </body>
 </html>

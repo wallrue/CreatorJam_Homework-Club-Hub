@@ -3,56 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | Homework Club Hub</title>
+    <title>Profile | Homework Club Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        h1 { font-family: 'Lexend', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900 min-h-screen">
-    <nav class="p-6 flex justify-between items-center max-w-7xl mx-auto">
-        <div class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
-            <span class="text-3xl">📚</span> Homework Club Hub
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-6" id="nav-links">
+                    <!-- Links injected by updateNav() -->
+                    <a href="/" class="text-stone-600 hover:text-emerald-700 font-medium transition">Home</a>
+                    <a href="/login" class="text-stone-600 hover:text-emerald-700 font-medium transition">Login</a>
+                    <a href="/join" class="bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-800 transition">Join the Club</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-stone-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="space-x-6 hidden md:flex items-center">
-            <a href="/" class="text-stone-600 hover:text-emerald-700 transition">Home</a>
-            <a href="/logout" class="text-red-600 hover:text-red-800 transition">Logout</a>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+            <a href="/" class="block text-stone-600 hover:text-emerald-700 font-medium">Home</a>
+            <a href="/login" class="block text-stone-600 hover:text-emerald-700 font-medium">Login</a>
+            <a href="/join" class="block bg-emerald-700 text-white px-4 py-2 rounded-lg text-center font-medium">Join the Club</a>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto py-12 px-6">
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-12 px-4">
         <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
             <div class="bg-emerald-700 h-32"></div>
             <div class="px-8 pb-8">
                 <div class="relative -mt-12 mb-6">
-                    <div class="w-24 h-24 bg-stone-200 rounded-full border-4 border-white shadow-md flex items-center justify-center text-3xl">👤</div>
-                </div>
-                
-                <h1 id="userName" class="text-3xl font-bold text-stone-800 mb-1">Loading...</h1>
-                <p id="userRole" class="text-emerald-700 font-medium mb-6">Please wait...</p>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Email Address</p>
-                        <p id="userEmail" class="text-stone-800 font-medium">—</p>
-                    </div>
-                    <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                        <p class="text-xs text-stone-500 uppercase font-bold mb-1">Member Since</p>
-                        <p id="userJoined" class="text-stone-800 font-medium">—</p>
+                    <div class="w-24 h-24 bg-stone-200 rounded-full border-4 border-white shadow-md flex items-center justify-center text-3xl text-stone-400">
+                        <i class="fas fa-user"></i>
                     </div>
                 </div>
-                
-                <div class="mt-8 pt-8 border-t border-stone-100">
-                    <h3 class="text-xl font-bold mb-4">Account Settings</h3>
-                    <button class="px-6 py-2 bg-stone-800 text-white rounded-lg font-semibold hover:bg-stone-900 transition">Edit Profile</button>
+
+                <div id="profileContent">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                        <div>
+                            <h1 id="userName" class="text-3xl font-bold text-stone-800 mb-1">Loading...</h1>
+                            <p id="userRole" class="text-emerald-700 font-medium mb-2">Please wait...</p>
+                            <p id="userBio" class="text-stone-600 text-sm">A dedicated volunteer tutor.</p>
+                        </div>
+                        <div id="actionButtons" class="flex gap-3 shrink-0">
+                            <!-- Action buttons injected by JS -->
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Email Address</p>
+                            <p id="userEmail" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Academic Subject</p>
+                            <p id="userSubject" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Language / Cultural Background</p>
+                            <p id="userLanguage" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Member Since</p>
+                            <p id="userJoined" class="text-stone-800 font-medium">—</p>
+                        </div>
+                    </div>
+
+                    <div id="verificationBadge" class="hidden mb-8 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center gap-3">
+                        <i class="fas fa-check-circle text-emerald-600 text-2xl"></i>
+                        <div>
+                            <p class="font-bold text-emerald-800">Verified Volunteer</p>
+                            <p class="text-sm text-emerald-600">This tutor has completed our safety vetting process.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Homework Club Hub</span>
+            </div>
+            <p class="text-stone-500 text-sm">&copy; 2026 Homework Club Hub. Powered by Indigenomics.</p>
+        </div>
+    </footer>
+
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Role-based navigation
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/" class="text-stone-600 hover:text-emerald-700 font-medium transition">Home</a>';
+                    links += '<a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>';
+                    if (user.role === 'volunteer') {
+                        links += '<a href="/my-profile" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Profile</a>';
+                    }
+                    links += '<a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Sessions</a>';
+                    if (user.role === 'admin') {
+                        links += '<a href="/admin" class="text-stone-600 hover:text-emerald-700 font-medium transition">Admin</a>';
+                    }
+                    links += '<a href="/logout" class="text-red-600 hover:text-red-800 font-medium transition"><i class="fas fa-sign-out-alt"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) { /* stays as guest links */ }
+        }
+
+        // Load profile
         async function loadProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const name = urlParams.get('name');
@@ -60,23 +165,64 @@
 
             try {
                 const response = await fetch(endpoint);
-                if (response.ok) {
-                    const user = await response.json();
-                    document.getElementById('userName').textContent = user.full_name;
-                    document.getElementById('userRole').textContent = user.role.replace('_', ' ').toUpperCase();
-                    document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('userJoined').textContent = user.created_at;
-                } else {
+                if (!response.ok) {
                     if (!name) {
                         window.location.href = '/login';
                     } else {
-                        document.getElementById('userName').textContent = "User Not Found";
+                        document.getElementById('profileContent').innerHTML = `
+                            <div class="text-center py-12">
+                                <i class="fas fa-user-slash text-5xl text-stone-300 mb-4"></i>
+                                <h2 class="text-xl font-bold text-stone-600 mb-2">User Not Found</h2>
+                                <p class="text-stone-500 mb-4">We couldn't find a profile for this user.</p>
+                                <a href="/search" class="text-emerald-700 font-medium hover:underline">&larr; Back to Tutor Search</a>
+                            </div>
+                        `;
                     }
+                    return;
                 }
+
+                const user = await response.json();
+
+                document.getElementById('userName').textContent = user.full_name;
+                document.getElementById('userRole').textContent = user.role === 'volunteer' ? 'Volunteer Tutor' : 'Student / Parent';
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userSubject').textContent = user.subject || 'Not specified';
+                document.getElementById('userLanguage').textContent = user.language || 'Not specified';
+                document.getElementById('userJoined').textContent = user.created_at;
+
+                // Show verification badge if verified
+                if (user.is_verified) {
+                    document.getElementById('verificationBadge').classList.remove('hidden');
+                }
+
+                // Action buttons based on context
+                const actionButtons = document.getElementById('actionButtons');
+                if (name) {
+                    // Public profile view - show action buttons
+                    if (user.role === 'volunteer') {
+                        actionButtons.innerHTML = `
+                            <a href="/booking?tutor=${encodeURIComponent(user.full_name)}" class="bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-emerald-800 transition flex items-center gap-2">
+                                <i class="fas fa-calendar-plus"></i> Book Session
+                            </a>
+                        `;
+                    } else {
+                        actionButtons.innerHTML = `<p class="text-stone-500 text-sm">This is a student/parent profile.</p>`;
+                    }
+                } else {
+                    // Self view - no action buttons needed
+                    actionButtons.innerHTML = '<span class="text-stone-400 text-sm">Viewing your own profile</span>';
+                }
+
             } catch (err) {
                 console.error('Error loading profile:', err);
+                if (!name) {
+                    window.location.href = '/login';
+                }
             }
         }
+
+        // Init
+        updateNav();
         loadProfile();
     </script>
 </body>
