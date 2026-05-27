@@ -53,7 +53,6 @@ Open your preferred terminal:
 ```bash
 git clone https://github.com/wallrue/CreatorJam_Homework-Club-Hub.git
 cd CreatorJam_Homework-Club-Hub
-git switch team-2
 ```
 
 **Below are the steps to design the new interface (if you just want to run the current website, skip Step 2)**
