@@ -23,7 +23,8 @@ Before creating your blueprint, review the **TEAM-PLAYBOOK** documentation inclu
 Open PowerShell on Windows and run the official installation script:
 
 ```powershell
-iex (irm [https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1](https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1))```
+iex (irm [https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1](https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1))
+```
 
 ### 3. Configure the AI Endpoint
 - API Base URL: https://regen.gaiaai.xyz/events/creator-jam/api/v1
