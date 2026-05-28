@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Club | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="/login" class="text-stone-600 hover:text-emerald-700 font-medium transition">Already have an account? Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-100">
+            <div class="bg-emerald-700 py-8 px-6 text-center text-white">
+                <h1 class="text-2xl font-bold mb-2">Create Your Account</h1>
+                <p class="text-emerald-100">Join a community of learners and mentors</p>
+            </div>
+
+            <div class="p-8">
+                <form id="joinForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" id="full_name" name="full_name" required
+                                class="block w-full pl-10 pr-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="Jane Doe">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Email Address</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" id="email" name="email" required
+                                class="block w-full pl-10 pr-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="name@example.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-400">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" name="password" required
+                                class="block w-full pl-10 pr-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="Create a password">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-2">I am a...</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="relative flex cursor-pointer">
+                                <input type="radio" name="role" value="student_parent" checked class="sr-only peer">
+                                <div class="w-full p-3 text-center border-2 border-stone-200 rounded-lg peer-checked:border-emerald-700 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 transition-all">
+                                    <i class="fas fa-child mb-1 block text-lg"></i>
+                                    <span class="text-xs font-bold uppercase">Student/Parent</span>
+                                </div>
+                            </label>
+                            <label class="relative flex cursor-pointer">
+                                <input type="radio" name="role" value="volunteer" class="sr-only peer">
+                                <div class="w-full p-3 text-center border-2 border-stone-200 rounded-lg peer-checked:border-emerald-700 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 transition-all">
+                                    <i class="fas fa-chalkboard-teacher mb-1 block text-lg"></i>
+                                    <span class="text-xs font-bold uppercase">Volunteer Tutor</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Subject</label>
+                            <input type="text" id="subject" name="subject"
+                                class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="e.g. Physics, Math">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Language</label>
+                            <input type="text" id="language" name="language"
+                                class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="e.g. Spanish, Mandarin">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-lg font-bold hover:bg-emerald-800 transition shadow-lg flex items-center justify-center gap-2">
+                        Create Account <i class="fas fa-arrow-right text-sm"></i>
+                    </button>
+                </form>
+
+                <div id="message" class="mt-4 text-center text-sm hidden"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-stone-500 text-xs border-t border-stone-200">
+        &copy; 2026 Homework Club Hub. All rights reserved.
+    </footer>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        document.getElementById('joinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            msgDiv.classList.add('hidden');
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgDiv.textContent = result.message;
+                    msgDiv.className = 'mt-4 text-center text-sm text-emerald-700 font-medium';
+                    msgDiv.classList.remove('hidden');
+                    showToast('Account created! Redirecting to login...', 'success');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                } else {
+                    msgDiv.textContent = result.error || 'Something went wrong';
+                    msgDiv.className = 'mt-4 text-center text-sm text-red-600 font-medium';
+                    msgDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                msgDiv.textContent = 'Network error. Please try again.';
+                msgDiv.className = 'mt-4 text-center text-sm text-red-600 font-medium';
+                msgDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

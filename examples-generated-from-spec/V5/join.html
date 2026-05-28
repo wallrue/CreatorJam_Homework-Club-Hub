@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Club | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'], source: ['Source Sans 3', 'sans-serif'] },
+                    colors: { indigo: { 50:'#EEF2FF',100:'#E0E7FF',200:'#C7D2FE',300:'#A5B4FC',400:'#818CF8',500:'#6366F1',600:'#4F46E5',700:'#4338CA',800:'#3730A3',900:'#312E81' }, violet: { 50:'#F5F3FF',100:'#EDE9FE',200:'#DDD6FE',300:'#C4B5FD',400:'#A78BFA',500:'#8B5CF6',600:'#7C3AED',650:'#6B21A8',700:'#6D28D9',800:'#5B21B6',900:'#4C1D95' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; }
+        .glass { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(99,102,241,0.1); box-shadow: 0 8px 32px rgba(99,102,241,0.1); }
+        .gradient-top { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #8B5CF6 100%); }
+        .input-focus { @apply focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all; }
+        .role-card { transition: all 0.2s ease; cursor: pointer; }
+        .role-card input:checked + div { border-color: #4F46E5; background: #EEF2FF; color: #4F46E5; }
+        .role-card input:checked + div .role-check { opacity: 1; transform: scale(1); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-indigo-50/40 to-violet-50/30 min-h-screen flex flex-col">
+
+    <!-- Minimal Auth Nav -->
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-indigo-100/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/" class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <span class="font-outfit font-bold text-xl text-indigo-900 tracking-tight">Homework Club Hub</span>
+                </a>
+                <a href="/login" class="px-5 py-2.5 rounded-xl text-slate-600 font-medium hover:bg-indigo-50 hover:text-indigo-700 transition text-sm flex items-center gap-2">
+                    Already have an account? <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Join Form -->
+    <main class="flex-grow flex items-center justify-center py-16 px-4">
+        <div class="w-full max-w-md">
+            <div class="glass rounded-3xl overflow-hidden">
+                <div class="gradient-top py-10 px-8 text-center text-white relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                        <div class="absolute w-40 h-40 bg-white rounded-full -top-20 -right-20"></div>
+                        <div class="absolute w-32 h-32 bg-white rounded-full -bottom-16 -left-16"></div>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                            <i class="fas fa-user-plus text-2xl"></i>
+                        </div>
+                        <h1 class="text-2xl font-outfit font-bold mb-1">Create Your Account</h1>
+                        <p class="text-white/80 text-sm">Join a community of learners and mentors</p>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <form id="joinForm" class="space-y-5">
+                        <!-- Full Name -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-user"></i></span>
+                                <input type="text" id="full_name" name="full_name" required
+                                    class="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm input-focus outline-none"
+                                    placeholder="Jane Doe">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-envelope"></i></span>
+                                <input type="email" id="email" name="email" required
+                                    class="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm input-focus outline-none"
+                                    placeholder="name@example.com">
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-lock"></i></span>
+                                <input type="password" id="password" name="password" required
+                                    class="block w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm input-focus outline-none"
+                                    placeholder="Create a strong password">
+                            </div>
+                        </div>
+
+                        <!-- Role Selector -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-3">I am a...</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="role-card relative">
+                                    <input type="radio" name="role" value="student_parent" checked class="sr-only">
+                                    <div class="border-2 border-slate-200 rounded-xl p-4 text-center transition-all hover:border-indigo-200">
+                                        <div class="role-check absolute top-2 right-2 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center opacity-0 transform scale-50 transition-all">
+                                            <i class="fas fa-check text-white text-xs"></i>
+                                        </div>
+                                        <i class="fas fa-child mb-2 block text-xl text-slate-500"></i>
+                                        <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Student/Parent</span>
+                                    </div>
+                                </label>
+                                <label class="role-card relative">
+                                    <input type="radio" name="role" value="volunteer" class="sr-only">
+                                    <div class="border-2 border-slate-200 rounded-xl p-4 text-center transition-all hover:border-indigo-200">
+                                        <div class="role-check absolute top-2 right-2 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center opacity-0 transform scale-50 transition-all">
+                                            <i class="fas fa-check text-white text-xs"></i>
+                                        </div>
+                                        <i class="fas fa-chalkboard-teacher mb-2 block text-xl text-slate-500"></i>
+                                        <span class="text-xs font-bold uppercase tracking-wider text-slate-600">Volunteer Tutor</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Subject & Language -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject</label>
+                                <input type="text" id="subject" name="subject"
+                                    class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm input-focus outline-none"
+                                    placeholder="e.g. Physics, Math">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Language</label>
+                                <input type="text" id="language" name="language"
+                                    class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm input-focus outline-none"
+                                    placeholder="e.g. Spanish, Mandarin">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn"
+                            class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-bold hover:from-indigo-700 hover:to-violet-700 transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+                            <span>Create Account</span> <i class="fas fa-arrow-right text-sm"></i>
+                        </button>
+                    </form>
+
+                    <div id="message" class="mt-4 text-center text-sm hidden"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-slate-400 text-xs">
+        &copy; 2026 Homework Club Hub. All rights reserved.
+    </footer>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-xl shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        document.getElementById('joinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('message');
+            msgDiv.classList.add('hidden');
+            const submitBtn = document.getElementById('submitBtn');
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+
+            try {
+                const response = await fetch('/api/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgDiv.textContent = result.message;
+                    msgDiv.className = 'mt-4 text-center text-sm text-emerald-600 font-medium';
+                    msgDiv.classList.remove('hidden');
+                    showToast('Account created! Redirecting to login...', 'success');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                } else {
+                    msgDiv.textContent = result.error || 'Something went wrong';
+                    msgDiv.className = 'mt-4 text-center text-sm text-red-500 font-medium';
+                    msgDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                msgDiv.textContent = 'Network error. Please try again.';
+                msgDiv.className = 'mt-4 text-center text-sm text-red-500 font-medium';
+                msgDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Create Account</span> <i class="fas fa-arrow-right text-sm"></i>';
+            }
+        });
+    </script>
+</body>
+</html>

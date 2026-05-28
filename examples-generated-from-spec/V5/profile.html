@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'], source: ['Source Sans 3', 'sans-serif'] },
+                    colors: { indigo: { 50:'#EEF2FF',100:'#E0E7FF',200:'#C7D2FE',300:'#A5B4FC',400:'#818CF8',500:'#6366F1',600:'#4F46E5',700:'#4338CA',800:'#3730A3',900:'#312E81' }, violet: { 50:'#F5F3FF',100:'#EDE9FE',200:'#DDD6FE',300:'#C4B5FD',400:'#A78BFA',500:'#8B5CF6',600:'#7C3AED',650:'#6B21A8',700:'#6D28D9',800:'#5B21B6',900:'#4C1D95' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Source Sans 3', sans-serif; }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; }
+        .glass { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(99,102,241,0.1); box-shadow: 0 4px 16px rgba(99,102,241,0.06); }
+        .btn-primary { @apply bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-full font-semibold shadow-lg shadow-indigo-200 hover:shadow-xl transition-all; }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-slate-50 via-indigo-50/20 to-white min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-indigo-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/" class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <span class="font-outfit font-bold text-xl text-indigo-900 tracking-tight">Homework Club Hub</span>
+                </a>
+                <div class="hidden md:flex items-center gap-1" id="nav-links"></div>
+                <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 hover:text-indigo-600 transition">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-indigo-100/50 px-4 py-4 space-y-2">
+            <a href="/" class="block px-4 py-2.5 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">Home</a>
+            <a href="/search" class="block px-4 py-2.5 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">Find a Tutor</a>
+            <a href="/my-sessions" class="block px-4 py-2.5 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">My Sessions</a>
+            <a href="/logout" class="block px-4 py-2.5 rounded-xl text-red-500 hover:bg-red-50 font-medium transition">Logout</a>
+        </div>
+    </nav>
+
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <main class="flex-grow max-w-4xl mx-auto py-10 px-4">
+        <div class="glass rounded-3xl overflow-hidden">
+            <!-- Top Banner -->
+            <div class="h-36 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-500 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute w-64 h-64 bg-white rounded-full -top-32 -right-32"></div>
+                    <div class="absolute w-48 h-48 bg-white rounded-full -bottom-24 -left-24"></div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="px-8 pb-8 -mt-16 relative z-10">
+                <!-- Avatar -->
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+                    <div class="flex items-end gap-5">
+                        <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-white shadow-xl">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h1 id="userName" class="text-3xl font-outfit font-bold text-slate-900 mb-1">Loading...</h1>
+                            <p id="userRole" class="text-indigo-600 font-semibold">Please wait...</p>
+                        </div>
+                    </div>
+                    <div id="actionButtons" class="flex gap-3 shrink-0"></div>
+                </div>
+
+                <!-- Info Grid -->
+                <div id="profileContent">
+                    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                            <p class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-1.5">Email</p>
+                            <p id="userEmail" class="text-slate-800 font-semibold">—</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                            <p class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-1.5">Subject</p>
+                            <p id="userSubject" class="text-slate-800 font-semibold">—</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                            <p class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-1.5">Language</p>
+                            <p id="userLanguage" class="text-slate-800 font-semibold">—</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                            <p class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-1.5">Member Since</p>
+                            <p id="userJoined" class="text-slate-800 font-semibold">—</p>
+                        </div>
+                    </div>
+
+                    <!-- Bio -->
+                    <div id="userBioContainer" class="hidden bg-gradient-to-br from-indigo-50 to-violet-50 rounded-2xl p-6 border border-indigo-100 mb-8">
+                        <p class="text-xs uppercase font-bold text-indigo-400 tracking-wider mb-2">About</p>
+                        <p id="userBio" class="text-slate-700 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Verification Badge -->
+                    <div id="verificationBadge" class="hidden bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-5 border border-emerald-200 flex items-center gap-4 mb-8">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md shrink-0">
+                            <i class="fas fa-shield-halved text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-outfit font-bold text-emerald-800">Verified Volunteer</p>
+                            <p class="text-sm text-emerald-600">This tutor has completed our safety vetting process.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-50 border-t border-slate-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-xs"></i>
+                </div>
+                <span class="font-outfit font-bold text-lg text-indigo-900">Homework Club Hub</span>
+            </div>
+            <p class="text-slate-400 text-sm">&copy; 2026 Homework Club Hub. Powered by Indigenomics.</p>
+            <div class="flex gap-5">
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 transition"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 transition"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-indigo-100 hover:text-indigo-600 transition"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-xl shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">Home</a>';
+                    links += '<a href="/search" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">Find a Tutor</a>';
+                    if (user.role === 'volunteer') {
+                        links += '<a href="/my-profile" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">My Profile</a>';
+                    }
+                    links += '<a href="/my-sessions" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">My Sessions</a>';
+                    if (user.role === 'admin') {
+                        links += '<a href="/admin" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 font-medium transition">Admin</a>';
+                    }
+                    links += '<a href="/logout" class="px-4 py-2 rounded-xl text-red-500 hover:bg-red-50 font-medium transition"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) {}
+        }
+
+        async function loadProfile() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name');
+            const endpoint = name ? `/api/profile?name=${encodeURIComponent(name)}` : '/api/me';
+
+            try {
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    if (!name) { window.location.href = '/login'; return; }
+                    document.getElementById('profileContent').innerHTML = `<div class="text-center py-16">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-50 flex items-center justify-center"><i class="fas fa-user-slash text-slate-300 text-4xl"></i></div>
+                        <h2 class="text-xl font-outfit font-bold text-slate-500 mb-2">User Not Found</h2>
+                        <p class="text-slate-400 mb-4">We couldn't find a profile for this user.</p>
+                        <a href="/search" class="text-indigo-600 font-medium hover:underline">← Back to Tutor Search</a>
+                    </div>`;
+                    return;
+                }
+
+                const user = await response.json();
+
+                document.getElementById('userName').textContent = user.full_name;
+                document.getElementById('userRole').textContent = user.role === 'volunteer' ? 'Volunteer Tutor' : 'Student / Parent';
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userSubject').textContent = user.subject || 'Not specified';
+                document.getElementById('userLanguage').textContent = user.language || 'Not specified';
+                document.getElementById('userJoined').textContent = user.created_at;
+
+                // Bio
+                if (user.bio) {
+                    document.getElementById('userBio').textContent = user.bio;
+                    document.getElementById('userBioContainer').classList.remove('hidden');
+                }
+
+                // Verification
+                if (user.is_verified) {
+                    document.getElementById('verificationBadge').classList.remove('hidden');
+                }
+
+                // Action buttons
+                const actionButtons = document.getElementById('actionButtons');
+                if (name) {
+                    if (user.role === 'volunteer') {
+                        actionButtons.innerHTML = `<a href="/booking?tutor=${encodeURIComponent(user.full_name)}" class="px-5 py-2.5 btn-primary text-sm flex items-center gap-2"><i class="fas fa-calendar-plus"></i> Book Session</a>`;
+                    } else {
+                        actionButtons.innerHTML = '<span class="text-slate-400 text-sm">Student / Parent profile</span>';
+                    }
+                } else {
+                    actionButtons.innerHTML = '<span class="text-slate-400 text-sm flex items-center gap-2"><i class="fas fa-lock text-xs"></i> Your profile</span>';
+                }
+
+            } catch (err) {
+                console.error('Error loading profile:', err);
+                if (!name) { window.location.href = '/login'; }
+            }
+        }
+
+        updateNav();
+        loadProfile();
+    </script>
+</body>
+</html>

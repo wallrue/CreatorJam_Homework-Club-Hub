@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Club Hub | Empowering Community Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Lexend', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #065f46 0%, #047857 50%, #10b981 100%); }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-6" id="nav-links">
+                    <!-- Links injected by updateNav() -->
+                    <a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>
+                    <a href="/login" class="text-stone-600 hover:text-emerald-700 font-medium transition">Login</a>
+                    <a href="/join" class="bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-800 transition">Join the Club</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-stone-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+            <a href="/search" class="block text-stone-600 hover:text-emerald-700 font-medium">Find a Tutor</a>
+            <a href="/login" class="block text-stone-600 hover:text-emerald-700 font-medium">Login</a>
+            <a href="/join" class="block bg-emerald-700 text-white px-4 py-2 rounded-lg text-center font-medium">Join the Club</a>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Hero Section -->
+    <header class="hero-gradient text-white py-20 px-4">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Bridging the Gap in <span class="text-emerald-200">Academic Support</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 text-emerald-100 max-w-3xl mx-auto">
+                Connecting students with volunteer tutors who share their language and culture. Removing financial barriers to ensure every student has the guidance they need to excel in science and beyond.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/join" class="bg-white text-emerald-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-emerald-50 transition shadow-lg">
+                    Get Started Free
+                </a>
+                <a href="/search" class="bg-emerald-600 text-white border border-emerald-400 px-8 py-4 rounded-full font-bold text-lg hover:bg-emerald-500 transition shadow-lg">
+                    Explore Tutors
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- How It Works -->
+    <section class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">How It Works</h2>
+                <div class="w-20 h-1 bg-emerald-700 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">1. Join</h3>
+                    <p class="text-stone-600">Create a profile specifying your academic needs as a student/parent or your expertise as a volunteer tutor.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">2. Match</h3>
+                    <p class="text-stone-600">Our system pairs you with a tutor who shares your subject interests and cultural background.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">3. Succeed</h3>
+                    <p class="text-stone-600">Break through learning barriers with support that understands you. Book sessions and track progress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Why Homework Club Hub?</h2>
+                <div class="w-20 h-1 bg-emerald-700 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="bg-stone-50 p-8 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Cultural Resonance</h3>
+                    <p class="text-stone-600">We prioritize pairing students with tutors who share their linguistic and cultural background to foster trust and psychological safety.</p>
+                </div>
+                <div class="bg-stone-50 p-8 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Radical Accessibility</h3>
+                    <p class="text-stone-600">Financial status should never be a barrier. Our platform is completely free for students and families in need of support.</p>
+                </div>
+                <div class="bg-stone-50 p-8 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition text-center">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Empowered Volunteers</h3>
+                    <p class="text-stone-600">Tutors build professional portfolios and gain community recognition while giving back to their own culture.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-stone-900 text-white py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to make a difference?</h2>
+            <p class="text-stone-400 mb-10 text-lg">Whether you are a parent seeking help for your child or a professional looking to volunteer, we have a place for you.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/join" class="bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-600 transition">Sign Up Now</a>
+                <a href="/login" class="bg-transparent border border-stone-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-stone-800 transition">Login to Account</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Homework Club Hub</span>
+            </div>
+            <p class="text-stone-500 text-sm">
+                &copy; 2026 Homework Club Hub. Powered by Indigenomics.
+            </p>
+            <div class="flex gap-6 text-stone-400">
+                <a href="#" class="hover:text-emerald-700 transition"><i class="fab fa-linkedin text-xl"></i></a>
+                <a href="#" class="hover:text-emerald-700 transition"><i class="fab fa-twitter text-xl"></i></a>
+                <a href="#" class="hover:text-emerald-700 transition"><i class="fab fa-facebook text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium transition-opacity ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Role-based navigation
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>';
+                    if (user.role === 'volunteer') {
+                        links += '<a href="/my-profile" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Profile</a>';
+                    }
+                    links += '<a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Sessions</a>';
+                    if (user.role === 'admin') {
+                        links += '<a href="/admin" class="text-stone-600 hover:text-emerald-700 font-medium transition">Admin</a>';
+                    }
+                    links += '<a href="/logout" class="text-red-600 hover:text-red-800 font-medium transition"><i class="fas fa-sign-out-alt"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) {
+                // Stays as guest links
+            }
+        }
+
+        // Init
+        updateNav();
+    </script>
+</body>
+</html>

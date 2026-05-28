@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Homework Club Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-emerald-700 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Homework Club Hub</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-6" id="nav-links">
+                    <!-- Links injected by updateNav() -->
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-stone-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+            <a href="/search" class="block text-stone-600 hover:text-emerald-700 font-medium">Find a Tutor</a>
+            <a href="/my-sessions" class="block text-stone-600 hover:text-emerald-700 font-medium">My Sessions</a>
+            <a href="/logout" class="block text-red-600 hover:text-red-800 font-medium">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-12 px-4">
+        <div class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="bg-emerald-700 h-32"></div>
+            <div class="px-8 pb-8">
+                <div class="relative -mt-12 mb-6">
+                    <div class="w-24 h-24 bg-emerald-100 rounded-full border-4 border-white shadow-md flex items-center justify-center text-emerald-700 text-3xl font-bold">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <!-- Profile Info Display -->
+                <div id="profileDisplay">
+                    <h1 id="userName" class="text-3xl font-bold text-stone-800 mb-1">Loading...</h1>
+                    <p id="userRole" class="text-emerald-700 font-medium mb-6">Please wait...</p>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Email Address</p>
+                            <p id="userEmail" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Academic Subject</p>
+                            <p id="userSubject" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Language / Cultural Background</p>
+                            <p id="userLanguage" class="text-stone-800 font-medium">—</p>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <p class="text-xs text-stone-500 uppercase font-bold mb-1">Member Since</p>
+                            <p id="userJoined" class="text-stone-800 font-medium">—</p>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Button -->
+                    <div class="pt-6 border-t border-stone-100">
+                        <button id="edit-btn" class="px-6 py-2.5 bg-emerald-700 text-white rounded-lg font-semibold hover:bg-emerald-800 transition flex items-center gap-2">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Edit Form (hidden by default) -->
+                <div id="editForm" class="hidden pt-6 border-t border-stone-100">
+                    <h3 class="text-xl font-bold mb-6">Edit Your Profile</h3>
+                    <form id="profileUpdateForm" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Subject / Expertise</label>
+                            <input type="text" id="edit-subject"
+                                class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="e.g. Physics, Math">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Language / Cultural Background</label>
+                            <input type="text" id="edit-language"
+                                class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="e.g. Spanish, Mandarin">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Bio</label>
+                            <textarea id="edit-bio" rows="4"
+                                class="block w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                placeholder="Tell students about yourself and your teaching approach..."></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="submit" class="px-6 py-2.5 bg-emerald-700 text-white rounded-lg font-semibold hover:bg-emerald-800 transition">
+                                Save Changes
+                            </button>
+                            <button type="button" id="cancel-edit-btn" class="px-6 py-2.5 bg-stone-200 text-stone-700 rounded-lg font-semibold hover:bg-stone-300 transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2 text-xl font-bold text-emerald-700">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Homework Club Hub</span>
+            </div>
+            <p class="text-stone-500 text-sm">&copy; 2026 Homework Club Hub. Powered by Indigenomics.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Toast notification helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg shadow-lg text-white font-medium ${type === 'success' ? 'bg-emerald-700' : 'bg-red-600'}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Auth guard - redirect if not logged in
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/me');
+                if (!response.ok) {
+                    window.location.href = '/login';
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                window.location.href = '/login';
+                return false;
+            }
+        }
+
+        // Role-based navigation
+        async function updateNav() {
+            const navLinks = document.getElementById('nav-links');
+            if (!navLinks) return;
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    let links = '';
+                    links += '<a href="/" class="text-stone-600 hover:text-emerald-700 font-medium transition">Home</a>';
+                    links += '<a href="/search" class="text-stone-600 hover:text-emerald-700 font-medium transition">Find a Tutor</a>';
+                    links += '<a href="/my-sessions" class="text-stone-600 hover:text-emerald-700 font-medium transition">My Sessions</a>';
+                    if (user.role === 'admin') {
+                        links += '<a href="/admin" class="text-stone-600 hover:text-emerald-700 font-medium transition">Admin</a>';
+                    }
+                    links += '<a href="/logout" class="text-red-600 hover:text-red-800 font-medium transition"><i class="fas fa-sign-out-alt"></i> Logout</a>';
+                    navLinks.innerHTML = links;
+                }
+            } catch (err) { /* stays as guest links */ }
+        }
+
+        // Load profile data
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/me');
+                if (!response.ok) return;
+
+                const user = await response.json();
+
+                document.getElementById('userName').textContent = user.full_name;
+                document.getElementById('userRole').textContent = user.role === 'volunteer' ? 'Volunteer Tutor' : 'Student / Parent';
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userSubject').textContent = user.subject || 'Not specified';
+                document.getElementById('userLanguage').textContent = user.language || 'Not specified';
+                document.getElementById('userJoined').textContent = user.created_at;
+
+                // Populate edit form fields
+                document.getElementById('edit-subject').value = user.subject || '';
+                document.getElementById('edit-language').value = user.language || '';
+            } catch (err) {
+                console.error('Error loading profile:', err);
+            }
+        }
+
+        // Toggle edit form
+        document.getElementById('edit-btn').addEventListener('click', () => {
+            document.getElementById('profileDisplay').classList.add('hidden');
+            document.getElementById('editForm').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+            document.getElementById('profileDisplay').classList.remove('hidden');
+            document.getElementById('editForm').classList.add('hidden');
+        });
+
+        // Save profile updates
+        document.getElementById('profileUpdateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const subject = document.getElementById('edit-subject').value;
+            const language = document.getElementById('edit-language').value;
+            const bio = document.getElementById('edit-bio').value;
+
+            try {
+                const response = await fetch('/api/me', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subject, language, bio })
+                });
+
+                if (response.ok) {
+                    showToast('Profile updated successfully!', 'success');
+                    document.getElementById('profileDisplay').classList.remove('hidden');
+                    document.getElementById('editForm').classList.add('hidden');
+                    loadProfile();
+                } else {
+                    const result = await response.json();
+                    showToast(result.error || 'Update failed', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+            }
+        });
+
+        // Init
+        checkAuth().then(ok => {
+            if (ok) {
+                loadProfile();
+                updateNav();
+            }
+        });
+    </script>
+</body>
+</html>

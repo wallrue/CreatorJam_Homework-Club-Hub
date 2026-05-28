@@ -58,11 +58,11 @@ cd CreatorJam_Homework-Club-Hub
 **Below are the steps to design the new interface (if you just want to run the current website, skip Step 2)**
 
 ### Step 2: Launch the Hermes
-Delete homework-club-prototype folder, open your preferred terminal:
+Delete homework-club-prototype folder and example folder, open your preferred terminal:
 ```bash
 cd \path\to\CreatorJam_Homework-Club-Hub
 Hermes
-The spec is in specs\homework-club-hub\vision-spec, the database is homework_club_hub.db, backend is app.py, please design the front-end pages based on vision-spec
+The spec is in specs\homework-club-hub\vision-spec, the database is homework_club_hub.db, backend is app.py, please design the front-end pages based on vision-spec, different style from the previous ones
 ```
 Troubleshooting:
 - If you encounter a time-out problem, please close/restart your terminal and try executing Step 2 again.
