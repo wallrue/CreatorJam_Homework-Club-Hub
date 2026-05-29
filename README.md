@@ -76,4 +76,6 @@ python app.py
 ```
 Then access: http://localhost:5000/
 
+
+![demo](demo.gif)
 ---
