@@ -1,7 +1,7 @@
 
 # Homework Club Hub 🚀
 
-Welcome to the **Homework Club Hub**, an innovative digital ecosystem built during the **Indigenomics CreatorJam** contest. This project is a modern, community-driven platform designed to bridge the educational gap by seamlessly connecting volunteer tutors with students seeking academic support. 
+Welcome to the **Homework Club Hub**, an innovative digital ecosystem built during the [**Indigenomics CreatorJam** contest](https://bright-pisces-b8e.notion.site/Indigenomics-TECH-JAM-Participant-Brief-3554ca2964a4802f9b64c77e02078339). This project is a modern, community-driven platform designed to bridge the educational gap by seamlessly connecting volunteer tutors with students seeking academic support. 
 
 Instead of relying on traditional, manual coding workflows, this platform was built using a cutting-edge, specification-first methodology outlined in the [CreatorJam SpecKit](https://github.com/indigenomicsxyz/CreatorJamSpecKit/tree/main). The entire development pipeline was driven by autonomous AI orchestration:
 
